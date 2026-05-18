@@ -3,17 +3,29 @@ import sys
 import random
 import os
 import math
+from banco_problemas import banco
 
 def centrar_x(texto_render, ancho_pantalla):
     return (ancho_pantalla - texto_render.get_width()) // 2
 
 def ejecutar_caso1(pantalla, reloj, ancho, alto, dificultad="facil"):
+    res = ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, 1)
+    if res == "siguiente_escenario":
+        res = ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, 2)
+        if res == "siguiente_escenario":
+            res = ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, 3)
+            if res == "siguiente_escenario":
+                return "menu"
+    return res
+
+def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     
     # Fuentes
-    titulo_fuente = pygame.font.SysFont("Arial", 48, bold=True)
-    texto_fuente = pygame.font.SysFont("Arial", 28)
-    input_fuente = pygame.font.SysFont("Arial", 36, bold=True)
+    titulo_fuente = pygame.font.SysFont("Arial", 36, bold=True)
+    texto_fuente = pygame.font.SysFont("Arial", 22)
+    texto_pista_fuente = pygame.font.SysFont("Arial", 18)
+    input_fuente = pygame.font.SysFont("Arial", 28, bold=True)
     
     # Colores
     BLANCO = (255, 255, 255)
@@ -24,165 +36,87 @@ def ejecutar_caso1(pantalla, reloj, ancho, alto, dificultad="facil"):
     GRIS = (60, 60, 60)
     AMARILLO = (255, 200, 50)
     
-    # Tipo de problema aleatorio según dificultad
+    # Selección aleatoria del problema
+    problema = random.choice(banco)
+    
+    # Configurar tiempos según dificultad
     if dificultad == "facil":
-        metodos_disponibles = ["newton_adelante", "lagrange", "diferencias_divididas"]
+        tiempo_limite_seg = 30 * 60
     elif dificultad == "intermedio":
-        # TODO: Implementar métodos intermedios reales (Ej: Bisección, Newton-Raphson)
-        # Por ahora usaremos lagrange como placeholder temporal para probar la UI
-        metodos_disponibles = ["lagrange"]
+        tiempo_limite_seg = 20 * 60
     elif dificultad == "dificil":
-        # TODO: Implementar métodos difíciles (Ej: Euler, Runge-Kutta)
-        # Por ahora usaremos diferencias_divididas como placeholder temporal
-        metodos_disponibles = ["diferencias_divididas"]
+        tiempo_limite_seg = 15 * 60
     else:
-        metodos_disponibles = ["newton_adelante"]
+        tiempo_limite_seg = 30 * 60
         
-    tipo_metodo = random.choice(metodos_disponibles)
-
-    # Generar problema
-    h = random.randint(1, 3)
-    x0 = random.randint(0, 5)
-    x1 = x0 + h
-    
-    if tipo_metodo == "newton_adelante":
-        x2 = x1 + h
-    else:
-        # En Lagrange o Dif. Divididas no es obligatorio estar equiespaciado
-        x2 = x1 + random.randint(1, 3)
-    
-    # Generar "función" oculta para tener datos enteros bonitos
-    a, b, c = random.randint(-2, 2), random.randint(-5, 5), random.randint(1, 10)
-    if a == 0: a = 1
-    
-    y0 = a*(x0**2) + b*x0 + c
-    y1 = a*(x1**2) + b*x1 + c
-    y2 = a*(x2**2) + b*x2 + c
-    
-    x_eval = x0 + (x2 - x0) / 2.0
-
-    if tipo_metodo == "newton_adelante":
-        dy0 = y1 - y0
-        dy1 = y2 - y1
-        d2y0 = dy1 - dy0
-        p = (x_eval - x0) / h
-        resultado_final = y0 + p * dy0 + (p * (p - 1) / 2.0) * d2y0
-        
-        respuestas_correctas = [str(dy0), str(d2y0), f"{resultado_final:.4f}".rstrip('0').rstrip('.')]
-        mensajes_paso = [
-            "1. Calcula la 1ra diferencia finita \u0394y0 (y1 - y0)",
-            "2. Calcula la 2da diferencia finita \u0394\u00b2y0 (\u0394y1 - \u0394y0)",
-            f"3. Calcula f({x_eval}) usando Newton hacia adelante"
-        ]
-        texto_instruccion = f"Resuelve con Interpolaci\u00f3n de Newton para hallar f({x_eval})."
-        
-    elif tipo_metodo == "lagrange":
-        l0 = ((x_eval - x1)*(x_eval - x2)) / ((x0 - x1)*(x0 - x2))
-        l1 = ((x_eval - x0)*(x_eval - x2)) / ((x1 - x0)*(x1 - x2))
-        l2 = ((x_eval - x0)*(x_eval - x1)) / ((x2 - x0)*(x2 - x1))
-        resultado_final = y0*l0 + y1*l1 + y2*l2
-        
-        respuestas_correctas = [f"{l0:.4f}".rstrip('0').rstrip('.'), f"{l1:.4f}".rstrip('0').rstrip('.'), f"{l2:.4f}".rstrip('0').rstrip('.'), f"{resultado_final:.4f}".rstrip('0').rstrip('.')]
-        mensajes_paso = [
-            f"1. Calcula el valor de L0({x_eval})",
-            f"2. Calcula el valor de L1({x_eval})",
-            f"3. Calcula el valor de L2({x_eval})",
-            f"4. Calcula f({x_eval}) (Suma de L_i * y_i)"
-        ]
-        texto_instruccion = f"Resuelve con Interpolaci\u00f3n de Lagrange para hallar f({x_eval})."
-
-    elif tipo_metodo == "diferencias_divididas":
-        f_x0_x1 = (y1 - y0) / (x1 - x0)
-        f_x1_x2 = (y2 - y1) / (x2 - x1)
-        f_x0_x1_x2 = (f_x1_x2 - f_x0_x1) / (x2 - x0)
-        resultado_final = y0 + f_x0_x1*(x_eval - x0) + f_x0_x1_x2*(x_eval - x0)*(x_eval - x1)
-        
-        respuestas_correctas = [f"{f_x0_x1:.4f}".rstrip('0').rstrip('.'), f"{f_x1_x2:.4f}".rstrip('0').rstrip('.'), f"{f_x0_x1_x2:.4f}".rstrip('0').rstrip('.'), f"{resultado_final:.4f}".rstrip('0').rstrip('.')]
-        mensajes_paso = [
-            "1. Calcula la primera dif. dividida f[x0, x1]",
-            "2. Calcula la primera dif. dividida f[x1, x2]",
-            "3. Calcula la segunda dif. dividida f[x0, x1, x2]",
-            f"4. Calcula f({x_eval}) con el polinomio de Newton"
-        ]
-        texto_instruccion = f"Usa Diferencias Divididas de Newton para hallar f({x_eval})."
+    penalizacion_pista_seg = 4 * 60
     
     mensajes_error = ""
     texto_usuario = ""
-    paso_actual = 0
     
     estado = "INTRO"
-    
-    # Tiempos
-    tiempo_limite_seg = 300 # 5 min
-    penalizacion_pista = 0
+    estado_anterior = None
+    tiempo_entrada_pausa = 0
     tiempo_inicio = pygame.time.get_ticks()
+    penalizacion_total = 0
+    
+    # Leer directamente los pasos estructurados del banco de problemas
+    pasos_finales = problema["pasos_juego"]
+    
+    paso_actual = 0
+    pista_revelada = False
     
     # Botones
     btn_continuar = pygame.Rect(ancho//2 - 150, alto - 100, 300, 60)
-    btn_pista = pygame.Rect(20, 20, 150, 40)
-    btn_enviar = pygame.Rect(ancho//2 - 100, alto - 150, 200, 50)
+    btn_pista = pygame.Rect(20, 20, 180, 40)
+    btn_enviar = pygame.Rect(ancho//2 - 100, alto - 80, 200, 50)
     btn_volver = pygame.Rect(ancho//2 - 150, alto - 100, 300, 60)
+    btn_comisaria = pygame.Rect(ancho//2 - 150, alto - 100, 300, 60)
     
-    pistas_dadas = []
-    if tipo_metodo == "newton_adelante":
-        lista_pistas = [
-            "Pista 1: Para \u0394y0 resta el valor de y1 menos y0",
-            "Pista 2: Para \u0394\u00b2y0 resta \u0394y1 menos \u0394y0",
-            "Pista 3: f(x) = y0 + p*\u0394y0 + [p(p-1)/2]*\u0394\u00b2y0",
-            "Pista 4: p = (x - x0) / h"
-        ]
-    elif tipo_metodo == "lagrange":
-        lista_pistas = [
-            "Pista 1: L0(x) = [(x-x1)(x-x2)] / [(x0-x1)(x0-x2)]",
-            "Pista 2: L1(x) = [(x-x0)(x-x2)] / [(x1-x0)(x1-x2)]",
-            "Pista 3: L2(x) = [(x-x0)(x-x1)] / [(x2-x0)(x2-x1)]",
-            "Pista 4: Multiplica cada L por su 'y' y sumalos"
-        ]
-    elif tipo_metodo == "diferencias_divididas":
-        lista_pistas = [
-            "Pista 1: f[x0, x1] = (y1 - y0) / (x1 - x0)",
-            "Pista 2: f[x1, x2] = (y2 - y1) / (x2 - x1)",
-            "Pista 3: f[x0, x1, x2] = (f[x1, x2] - f[x0, x1]) / (x2 - x0)",
-            "Pista 4: f(x) = y0 + f[x0, x1](x-x0) + f[x0, x1, x2](x-x0)(x-x1)"
-        ]
-    indice_pista = 0
-
     try:
-        fondo_caja = pygame.image.load(os.path.join(BASE_DIR, "fondos", "cajafuerte.jpeg"))
-        fondo_caja = pygame.transform.scale(fondo_caja, (ancho, alto))
+        icono_home = pygame.image.load(os.path.join(BASE_DIR, "fondos", "home.png")).convert_alpha()
+        icono_home = pygame.transform.scale(icono_home, (40, 40))
+        btn_menu_principal = pygame.Rect(20, alto - 60, 40, 40)
     except FileNotFoundError:
-        try:
-            fondo_caja = pygame.image.load(os.path.join(BASE_DIR, "fondos", "cajafuerte.jpg"))
-            fondo_caja = pygame.transform.scale(fondo_caja, (ancho, alto))
-        except FileNotFoundError:
-            try:
-                fondo_caja = pygame.image.load(os.path.join(BASE_DIR, "fondos", "cajafuerte.png"))
-                fondo_caja = pygame.transform.scale(fondo_caja, (ancho, alto))
-            except FileNotFoundError:
-                fondo_caja = pygame.Surface((ancho, alto))
-                fondo_caja.fill((30, 40, 50)) # Color oscuro de fondo
+        icono_home = None
+        btn_menu_principal = pygame.Rect(20, alto - 60, 160, 40)
+    
+    btn_conf_si = pygame.Rect(ancho//2 - 160, alto//2 + 50, 140, 50)
+    btn_conf_no = pygame.Rect(ancho//2 + 20, alto//2 + 50, 140, 50)
+    
+    try:
+        if fase == 1:
+            fondo = pygame.image.load(os.path.join(BASE_DIR, "fondos", "cajafuerte.jpeg")).convert()
+        elif fase == 2:
+            fondo = pygame.image.load(os.path.join(BASE_DIR, "fondos", "comisaria.png")).convert()
+        elif fase == 3:
+            fondo = pygame.image.load(os.path.join(BASE_DIR, "fondos", "interrogatorio.png")).convert()
+        else:
+            fondo = pygame.image.load(os.path.join(BASE_DIR, "fondos", "cajafuerte.jpeg")).convert()
+        fondo = pygame.transform.scale(fondo, (ancho, alto))
+    except FileNotFoundError:
+        fondo = pygame.Surface((ancho, alto))
+        fondo.fill((30, 40, 50))
     
     corriendo = True
     resultado_salida = "menu"
     
     while corriendo:
         
-        pantalla.blit(fondo_caja, (0, 0))
+        pantalla.blit(fondo, (0, 0))
         
-        # Oscurecer un poco la imagen de fondo para no perder la legibilidad del texto
         overlay = pygame.Surface((ancho, alto))
-        overlay.set_alpha(170)
+        overlay.set_alpha(190)
         overlay.fill((0, 0, 0))
         pantalla.blit(overlay, (0, 0))
         
-        # Calcular tiempo en estado JUGANDO
         tiempo_restante = 0
         if estado == "INTRO":
-            tiempo_inicio = pygame.time.get_ticks() # Mantiene el inicio hasta salir de intro
+            tiempo_inicio = pygame.time.get_ticks() 
         elif estado == "JUGANDO":
             tiempo_actual = pygame.time.get_ticks()
             segundos_transcurridos = (tiempo_actual - tiempo_inicio) // 1000
-            tiempo_restante = tiempo_limite_seg - segundos_transcurridos - penalizacion_pista
+            tiempo_restante = tiempo_limite_seg - segundos_transcurridos - penalizacion_total
             
             if tiempo_restante <= 0:
                 tiempo_restante = 0
@@ -194,159 +128,258 @@ def ejecutar_caso1(pantalla, reloj, ancho, alto, dificultad="facil"):
                 sys.exit()
                 
             if evento.type == pygame.MOUSEBUTTONDOWN:
+                if estado == "CONFIRMAR_SALIDA":
+                    if btn_conf_si.collidepoint(evento.pos):
+                        corriendo = False
+                        resultado_salida = "menu"
+                    elif btn_conf_no.collidepoint(evento.pos):
+                        estado = estado_anterior
+                        if estado == "JUGANDO":
+                            tiempo_pausado = pygame.time.get_ticks() - tiempo_entrada_pausa
+                            tiempo_inicio += tiempo_pausado
+                else:
+                    if btn_menu_principal.collidepoint(evento.pos):
+                        estado_anterior = estado
+                        estado = "CONFIRMAR_SALIDA"
+                        tiempo_entrada_pausa = pygame.time.get_ticks()
+                        continue
+                        
                 if estado == "INTRO" and btn_continuar.collidepoint(evento.pos):
                     estado = "JUGANDO"
-                    tiempo_inicio = pygame.time.get_ticks() # Comienza el tiempo
+                    tiempo_inicio = pygame.time.get_ticks()
                     
                 elif estado == "JUGANDO":
                     if btn_enviar.collidepoint(evento.pos):
-                        # Validar respuesta
-                        try:
-                            # Permitimos pequeño error decimal
-                            usr_val = float(texto_usuario)
-                            correct_val = float(respuestas_correctas[paso_actual])
-                            if abs(usr_val - correct_val) < 0.05:
-                                paso_actual += 1
-                                texto_usuario = ""
-                                mensajes_error = ""
-                                if paso_actual >= len(respuestas_correctas):
-                                    estado = "PISTA_ENCONTRADA"
-                            else:
-                                mensajes_error = "Respuesta incorrecta. Intenta de nuevo."
-                        except ValueError:
-                            mensajes_error = "Formato inv\u00e1lido. Ingresa un n\u00famero."
+                        resp_correcta = str(pasos_finales[paso_actual]["respuesta"]).replace(" ", "").lower()
+                        usr_val = texto_usuario.replace(" ", "").lower()
+                        
+                        es_correcta = False
+                        if usr_val == resp_correcta:
+                            es_correcta = True
+                        else:
+                            try:
+                                if abs(float(usr_val) - float(resp_correcta)) < 0.05:
+                                    es_correcta = True
+                            except ValueError:
+                                pass
+                                
+                        if es_correcta:
+                            paso_actual += 1
+                            texto_usuario = ""
+                            mensajes_error = ""
+                            pista_revelada = False
+                            if paso_actual >= len(pasos_finales):
+                                estado = "PISTA_ENCONTRADA"
+                        else:
+                            mensajes_error = "Respuesta incorrecta. Intenta de nuevo."
                     
                     elif btn_pista.collidepoint(evento.pos):
-                        if indice_pista < len(lista_pistas):
-                            pistas_dadas.append(lista_pistas[indice_pista])
-                            indice_pista += 1
-                            penalizacion_pista += 5
+                        if not pista_revelada:
+                            pista_revelada = True
+                            penalizacion_total += penalizacion_pista_seg
                             
-                elif estado in ["PISTA_ENCONTRADA", "PISTA_NO_ENCONTRADA"]:
+                elif estado == "PISTA_ENCONTRADA":
+                    if btn_comisaria.collidepoint(evento.pos):
+                        corriendo = False
+                        resultado_salida = "siguiente_escenario" # Para ir a la comisaría
+                        
+                elif estado == "PISTA_NO_ENCONTRADA":
                     if btn_volver.collidepoint(evento.pos):
                         corriendo = False
-                        if estado == "PISTA_ENCONTRADA":
-                            resultado_salida = "siguiente_escenario"
-                        else:
-                            resultado_salida = "menu"
+                        resultado_salida = "menu"
                             
             if evento.type == pygame.KEYDOWN and estado == "JUGANDO":
                 if evento.key == pygame.K_BACKSPACE:
                     texto_usuario = texto_usuario[:-1]
                 elif evento.key == pygame.K_RETURN:
-                    # Simular click en enviar
-                    try:
-                        usr_val = float(texto_usuario)
-                        correct_val = float(respuestas_correctas[paso_actual])
-                        if abs(usr_val - correct_val) < 0.05:
-                            paso_actual += 1
-                            texto_usuario = ""
-                            mensajes_error = ""
-                            if paso_actual >= len(respuestas_correctas):
-                                estado = "PISTA_ENCONTRADA"
-                        else:
-                            mensajes_error = "Respuesta incorrecta. Intenta de nuevo."
-                    except ValueError:
-                        mensajes_error = "Formato inv\u00e1lido. Ingresa un n\u00famero."
+                    resp_correcta = str(pasos_finales[paso_actual]["respuesta"]).replace(" ", "").lower()
+                    usr_val = texto_usuario.replace(" ", "").lower()
+                    
+                    es_correcta = False
+                    if usr_val == resp_correcta:
+                        es_correcta = True
+                    else:
+                        try:
+                            if abs(float(usr_val) - float(resp_correcta)) < 0.05:
+                                es_correcta = True
+                        except ValueError:
+                            pass
+                            
+                    if es_correcta:
+                        paso_actual += 1
+                        texto_usuario = ""
+                        mensajes_error = ""
+                        pista_revelada = False
+                        if paso_actual >= len(pasos_finales):
+                            estado = "PISTA_ENCONTRADA"
+                    else:
+                        mensajes_error = "Respuesta incorrecta. Intenta de nuevo."
                 else:
-                    if evento.unicode.isprintable(): # Solo admitimos caracteres escribibles
+                    if evento.unicode.isprintable():
                         texto_usuario += evento.unicode
                         
         # ---------------- DRAW ----------------
         if estado == "INTRO":
-            tit = titulo_fuente.render("CASO 01: La Caja Fuerte", True, BLANCO)
+            if fase == 1:
+                tit = titulo_fuente.render("CASO 01: La Caja Fuerte", True, BLANCO)
+                lineas = [
+                    "Has encontrado una caja fuerte con un candado digital.",
+                    "Para abrirla, debes resolver el siguiente problema de",
+                    f"M\u00e9todo Num\u00e9rico: {problema['metodo']}",
+                    "",
+                    "Se te pedir\u00e1n pasos intermedios antes de la respuesta final.",
+                    "Las pistas cuestan 4 minutos y te dar\u00e1n el procedimiento."
+                ]
+            elif fase == 2:
+                tit = titulo_fuente.render("CASO 01: La Comisar\u00eda", True, BLANCO)
+                lineas = [
+                    "Al llegar a la comisar\u00eda, encuentras un sobre con",
+                    "el nombre de dos sospechosos. Para descifrarlo,",
+                    "tendr\u00e1s que resolver el siguiente problema de",
+                    f"M\u00e9todo Num\u00e9rico: {problema['metodo']}",
+                    "",
+                    "Las pistas cuestan 4 minutos de tu tiempo."
+                ]
+            else:
+                tit = titulo_fuente.render("CASO 01: El Interrogatorio", True, BLANCO)
+                lineas = [
+                    "Est\u00e1s en la sala de interrogatorio con los sospechosos.",
+                    "Para saber qui\u00e9n es el culpable, eval\u00faa la evidencia",
+                    "resolviendo el siguiente problema de",
+                    f"M\u00e9todo Num\u00e9rico: {problema['metodo']}",
+                    "",
+                    "¡Es tu \u00faltima prueba, detective!"
+                ]
+                
             pantalla.blit(tit, (centrar_x(tit, ancho), 100))
-            
-            lineas = [
-                "En una caja fuerte se encuentra evidencia vital para el caso.",
-                "Pero la combinación est\u00e1 fragmentada en problemas de",
-                "m\u00e9todos num\u00e9ricos. Alguien protegi\u00f3 esto con matem\u00e1ticas.",
-                "",
-                texto_instruccion
-            ]
             
             for idx, linea in enumerate(lineas):
                 txt = texto_fuente.render(linea, True, BLANCO)
                 pantalla.blit(txt, (centrar_x(txt, ancho), 200 + idx*40))
                 
             pygame.draw.rect(pantalla, AZUL, btn_continuar, border_radius=10)
-            txt_btn = texto_fuente.render("Continuar", True, BLANCO)
+            txt_btn = texto_fuente.render("Empezar a resolver", True, BLANCO)
             pantalla.blit(txt_btn, (centrar_x(txt_btn, ancho), btn_continuar.y + 15))
             
         elif estado == "JUGANDO":
-            # Tiempo
             mins = tiempo_restante // 60
             secs = tiempo_restante % 60
             color_tiempo = BLANCO if tiempo_restante > 60 else ROJO
             txt_tiempo = titulo_fuente.render(f"{mins:02d}:{secs:02d}", True, color_tiempo)
             pantalla.blit(txt_tiempo, (ancho - 150, 20))
             
-            # Boton Pista
             pygame.draw.rect(pantalla, AMARILLO, btn_pista, border_radius=5)
-            txt_pista = texto_fuente.render("Pista (-5s)", True, NEGRO)
-            pantalla.blit(txt_pista, (btn_pista.x + 10, btn_pista.y + 5))
+            txt_pista = texto_fuente.render("Pista (-4 min)", True, NEGRO)
+            pantalla.blit(txt_pista, (btn_pista.x + 20, btn_pista.y + 5))
             
-            # Datos de la tabla
-            tit_datos = titulo_fuente.render("Datos del problema:", True, AZUL)
-            pantalla.blit(tit_datos, (centrar_x(tit_datos, ancho), 50))
+            tit_datos = titulo_fuente.render(f"M\u00e9todo: {problema['metodo']}", True, AZUL)
+            pantalla.blit(tit_datos, (centrar_x(tit_datos, ancho), 30))
             
-            tabla_txt = f"x0 = {x0}, y0 = {y0}  |  x1 = {x1}, y1 = {y1}  |  x2 = {x2}, y2 = {y2}"
-            txt_tb = texto_fuente.render(tabla_txt, True, BLANCO)
-            pantalla.blit(txt_tb, (centrar_x(txt_tb, ancho), 120))
+            txt_prob = texto_fuente.render(problema["problema"], True, BLANCO)
+            pantalla.blit(txt_prob, (centrar_x(txt_prob, ancho), 80))
             
-            # Pasos e instrucciones
-            inst_txt = titulo_fuente.render(mensajes_paso[paso_actual], True, VERDE)
-            pantalla.blit(inst_txt, (centrar_x(inst_txt, ancho), 220))
+            txt_val = texto_fuente.render(problema["valores"], True, VERDE)
+            pantalla.blit(txt_val, (centrar_x(txt_val, ancho), 110))
             
-            # Area de Input
-            pygame.draw.rect(pantalla, GRIS, (ancho//2 - 200, 320, 400, 60), border_radius=8)
+            inst_txt = texto_fuente.render(f"Paso {paso_actual+1}/{len(pasos_finales)} - {pasos_finales[paso_actual]['pregunta']}", True, AMARILLO)
+            pantalla.blit(inst_txt, (centrar_x(inst_txt, ancho), 460))
+            
+            pygame.draw.rect(pantalla, GRIS, (ancho//2 - 250, 500, 500, 50), border_radius=8)
+            
             txt_inp = input_fuente.render(texto_usuario, True, BLANCO)
-            pantalla.blit(txt_inp, (ancho//2 - 180, 330))
+            if txt_inp.get_width() > 480:
+                offsetX = txt_inp.get_width() - 480
+                superficie_recorte = pygame.Surface((480, 50), pygame.SRCALPHA)
+                superficie_recorte.blit(txt_inp, (-offsetX, 10))
+                pantalla.blit(superficie_recorte, (ancho//2 - 240, 500))
+            else:
+                pantalla.blit(txt_inp, (ancho//2 - 240, 510))
             
-            # Cursor
             if (pygame.time.get_ticks() // 500) % 2 == 0:
-                pygame.draw.line(pantalla, BLANCO, (ancho//2 - 180 + txt_inp.get_width() + 5, 335),
-                                 (ancho//2 - 180 + txt_inp.get_width() + 5, 365), 2)
+                cursor_x = ancho//2 - 240 + min(txt_inp.get_width(), 480) + 2
+                pygame.draw.line(pantalla, BLANCO, (cursor_x, 515), (cursor_x, 535), 2)
                                  
-            # Mensaje de error
             if mensajes_error:
                 err = texto_fuente.render(mensajes_error, True, ROJO)
-                pantalla.blit(err, (centrar_x(err, ancho), 400))
+                pantalla.blit(err, (centrar_x(err, ancho), 560))
                 
-            # Boton enviar
             pygame.draw.rect(pantalla, AZUL, btn_enviar, border_radius=10)
-            btn_env_txt = texto_fuente.render("Enviar (ENTER)", True, BLANCO)
+            btn_env_txt = texto_fuente.render("Comprobar", True, BLANCO)
             pantalla.blit(btn_env_txt, (centrar_x(btn_env_txt, ancho), btn_enviar.y + 10))
             
-            # Pistas mostradas
-            for idx, p in enumerate(pistas_dadas):
-                p_txt = texto_fuente.render(p, True, AMARILLO)
-                pantalla.blit(p_txt, (50, 480 + idx*30))
+            if pista_revelada:
+                p_txt = texto_pista_fuente.render("Pista: " + pasos_finales[paso_actual]["pista"], True, AMARILLO)
+                pantalla.blit(p_txt, (centrar_x(p_txt, ancho), 160))
                 
         elif estado == "PISTA_ENCONTRADA":
-            tit = titulo_fuente.render("\u00a1Pista Encontrada!", True, VERDE)
+            if fase == 1:
+                tit_victoria = "\u00a1Caja Fuerte Abierta!"
+                pista_txt = '"\u00a1El culpable est\u00e1 en la comisar\u00eda!"'
+                txt_btn_avanzar = "Ir a la Comisar\u00eda"
+            elif fase == 2:
+                tit_victoria = "\u00a1Sobre Descifrado!"
+                pista_txt = '"Los sospechosos apuntan al interrogatorio..."'
+                txt_btn_avanzar = "Ir al Interrogatorio"
+            else:
+                tit_victoria = "\u00a1CASO RESUELTO!"
+                pista_txt = '"¡El culpable ha sido encontrado, felicidades!"'
+                txt_btn_avanzar = "Volver al Men\u00fa Principal"
+                
+            tit = titulo_fuente.render(tit_victoria, True, VERDE)
             pantalla.blit(tit, (centrar_x(tit, ancho), 150))
             
-            msg = texto_fuente.render("La caja fuerte se ha abierto.", True, BLANCO)
+            msg = texto_fuente.render("Has resuelto todos los pasos del m\u00e9todo num\u00e9rico.", True, BLANCO)
             pantalla.blit(msg, (centrar_x(msg, ancho), 250))
             
-            pista = titulo_fuente.render('"El culpable trabaja en la comisar\u00eda"', True, AZUL)
+            pista = titulo_fuente.render(pista_txt, True, AZUL)
             pantalla.blit(pista, (centrar_x(pista, ancho), 350))
             
-            pygame.draw.rect(pantalla, AZUL, btn_volver, border_radius=10)
-            txt_btn = texto_fuente.render("Avanzar", True, BLANCO)
-            pantalla.blit(txt_btn, (centrar_x(txt_btn, ancho), btn_volver.y + 15))
+            pygame.draw.rect(pantalla, AZUL, btn_comisaria, border_radius=10)
+            txt_btn = texto_fuente.render(txt_btn_avanzar, True, BLANCO)
+            pantalla.blit(txt_btn, (centrar_x(txt_btn, ancho), btn_comisaria.y + 15))
             
         elif estado == "PISTA_NO_ENCONTRADA":
-            tit = titulo_fuente.render("Pista no encontrada", True, ROJO)
+            tit = titulo_fuente.render("Tiempo Agotado", True, ROJO)
             pantalla.blit(tit, (centrar_x(tit, ancho), 150))
             
-            msg = texto_fuente.render("No pudiste resolver el caso a tiempo.", True, BLANCO)
+            msg = texto_fuente.render("No pudiste abrir la caja fuerte a tiempo.", True, BLANCO)
             pantalla.blit(msg, (centrar_x(msg, ancho), 250))
             
             pygame.draw.rect(pantalla, AZUL, btn_volver, border_radius=10)
             txt_btn = texto_fuente.render("Volver al Men\u00fa Principal", True, BLANCO)
             pantalla.blit(txt_btn, (centrar_x(txt_btn, ancho), btn_volver.y + 15))
+            
+        elif estado == "CONFIRMAR_SALIDA":
+            # Fondo semi-transparente para el pop-up
+            oscuro = pygame.Surface((ancho, alto))
+            oscuro.set_alpha(200)
+            oscuro.fill(NEGRO)
+            pantalla.blit(oscuro, (0, 0))
+            
+            # Caja de confirmacion
+            caja_rect = pygame.Rect(ancho//2 - 250, alto//2 - 100, 500, 200)
+            pygame.draw.rect(pantalla, GRIS, caja_rect, border_radius=15)
+            pygame.draw.rect(pantalla, BLANCO, caja_rect, width=3, border_radius=15)
+            
+            msg = titulo_fuente.render("\u00bfSeguro que deseas salir?", True, BLANCO)
+            pantalla.blit(msg, (centrar_x(msg, ancho), alto//2 - 60))
+            
+            pygame.draw.rect(pantalla, ROJO, btn_conf_si, border_radius=10)
+            txt_si = texto_fuente.render("S\u00ed", True, BLANCO)
+            pantalla.blit(txt_si, (btn_conf_si.x + (140 - txt_si.get_width())//2, btn_conf_si.y + 10))
+            
+            pygame.draw.rect(pantalla, AZUL, btn_conf_no, border_radius=10)
+            txt_no = texto_fuente.render("No", True, BLANCO)
+            pantalla.blit(txt_no, (btn_conf_no.x + (140 - txt_no.get_width())//2, btn_conf_no.y + 10))
+
+        if estado != "CONFIRMAR_SALIDA":
+            if icono_home:
+                pygame.draw.rect(pantalla, ROJO, btn_menu_principal, border_radius=8)
+                pantalla.blit(icono_home, (btn_menu_principal.x, btn_menu_principal.y))
+            else:
+                pygame.draw.rect(pantalla, ROJO, btn_menu_principal, border_radius=8)
+                txt_menu = texto_pista_fuente.render("Men\u00fa Principal", True, BLANCO)
+                pantalla.blit(txt_menu, (btn_menu_principal.x + 10, btn_menu_principal.y + 10))
 
         pygame.display.flip()
         reloj.tick(60)
