@@ -336,7 +336,7 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase, estado_juego):
                 pygame.draw.rect(pantalla, (80, 80, 80), btn_pista, border_radius=5)
                 txt_pista = texto_fuente.render("Pista Usada", True, (160, 160, 160))
             else:
-                color_pista = AMARILLO if btn_pista.collidepoint(mouse) else AMARILLO_OSCURO
+                color_pista = AMARILLO if btn_pista.collidepoint(pygame.mouse.get_pos()) else AMARILLO_OSCURO
                 pygame.draw.rect(pantalla, color_pista, btn_pista, border_radius=5)
                 txt_pista = texto_fuente.render("Pista (-4 min)", True, NEGRO)
                 
