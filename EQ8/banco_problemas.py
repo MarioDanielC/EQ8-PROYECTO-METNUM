@@ -135,9 +135,9 @@ banco = [
             "g(x) = 2.714444444"
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula el primer término de L(x)", "pista": "y1 * L1(x)", "respuesta": "0.564444444444"},
-            {"pregunta": "Calcula el segundo término de L(x)", "pista": "y2 * L2(x)", "respuesta": "2.5066667"},
-            {"pregunta": "Calcula el tercer término de L(x)", "pista": "y3 * L3(x)", "respuesta": "-0.356666666"},
+            {"pregunta": "Calcula el primer término de g(x)", "pista": "y1 * g1(x)", "respuesta": "0.564444444444"},
+            {"pregunta": "Calcula el segundo término de g(x)", "pista": "y2 * g2(x)", "respuesta": "2.5066667"},
+            {"pregunta": "Calcula el tercer término de g(x)", "pista": "y3 * g3(x)", "respuesta": "-0.356666666"},
             {"pregunta": "Calcula la respuesta final de g(x)", "pista": "Suma los tres términos.", "respuesta": "2.714444444"}
         ],
         "respuesta_final": "2.714444444"
@@ -165,9 +165,9 @@ banco = [
             {"pregunta": "Calcula el valor de Y cuando X=1", "pista": "Sustituye X=1 en la ecuación.", "respuesta": "-3.5"},
             {"pregunta": "Calcula el valor de Y cuando X=2", "pista": "Sustituye X=2 en la ecuación.", "respuesta": "-3"},
             {"pregunta": "Calcula el valor de Y cuando X=3", "pista": "Sustituye X=3 en la ecuación.", "respuesta": "9.5"},
-            {"pregunta": "¿Entre qué intervalos de X hay cambios de signo?", "pista": "Escribe: Cambios de signo observados entre [-3, -2], [0, 1] y [2, 3]", "respuesta": "Cambios de signo observados entre [-3, -2], [0, 1] y [2, 3]"}
+            {"pregunta": "¿Entre qué intervalos de X hay cambios de signo?", "pista": "Escribe solamente los incisos con el formato [X, Y], [X, Y], [X, Y]", "respuesta": "[-3, -2], [0, 1], [2, 3]"}
         ],
-        "respuesta_final": "Cambios de signo observados entre [-3, -2], [0, 1] y [2, 3]"
+        "respuesta_final": "[-3, -2], [0, 1], [2, 3]"
     },
     {
         "id": 8,

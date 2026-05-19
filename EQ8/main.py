@@ -1,8 +1,11 @@
+# -*- coding: utf-8 -*-
 import os
 import pygame
 import sys
 import random
-import caso1
+from Caso1 import Caso1
+from Caso2 import Caso2
+from Caso3 import Caso3
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
@@ -17,7 +20,7 @@ pygame.display.set_caption("Detective: Casos Numericos")
 
 reloj = pygame.time.Clock()
 
-fondo = pygame.image.load(os.path.join(BASE_DIR, "fondos", "fondo1.jpg"))
+fondo = pygame.image.load(os.path.join(BASE_DIR, "assets", "menu", "fondo1.jpg"))
 fondo = pygame.transform.scale(fondo, (ANCHO, ALTO))
 
 pygame.mixer.music.load(os.path.join(BASE_DIR, "sonidos", "intro.wav"))
@@ -28,20 +31,21 @@ BLANCO = (255, 255, 255)
 AZUL = (50, 120, 255)
 GRIS = (60, 60, 60)
 NEGRO = (0, 0, 0)
+AMARILLO = (255, 200, 50)
+VERDE = (50, 200, 50)
 
 titulo_fuente = pygame.font.SysFont("Arial", 58, bold=True)
 menu_fuente = pygame.font.SysFont("Arial", 34)
 frase_fuente = pygame.font.SysFont("Arial", 24, italic=True)
 
 btn_iniciar = pygame.Rect(350, 320, 300, 70)
-btn_tutorial = pygame.Rect(350, 420, 300, 70)
+btn_marcador = pygame.Rect(350, 420, 300, 70)
 btn_salir = pygame.Rect(350, 520, 300, 70)
 
 # Botones menú selección de caso
 btn_caso1 = pygame.Rect(250, 230, 500, 60)
 btn_caso2 = pygame.Rect(250, 310, 500, 60)
 btn_caso3 = pygame.Rect(250, 390, 500, 60)
-btn_caso4 = pygame.Rect(250, 470, 500, 60)
 btn_volver = pygame.Rect(350, 560, 300, 60)
 
 # Botones de dificultad
@@ -51,6 +55,7 @@ btn_dificil = pygame.Rect(350, 410, 300, 60)
 
 estado_menu = "principal"
 caso_seleccionado = 0
+estado_progreso = {"casos_desbloqueados": 1, "puntaje": 0, "puntajes_casos": {1: 0, 2: 0, 3: 0}}
 
 lluvia = []
 
@@ -126,11 +131,11 @@ while True:
         )
 
         color_iniciar = AZUL if btn_iniciar.collidepoint(mouse) else GRIS
-        color_tutorial = AZUL if btn_tutorial.collidepoint(mouse) else GRIS
+        color_marcador = AZUL if btn_marcador.collidepoint(mouse) else GRIS
         color_salir = AZUL if btn_salir.collidepoint(mouse) else GRIS
 
         pygame.draw.rect(pantalla, color_iniciar, btn_iniciar, border_radius=12)
-        pygame.draw.rect(pantalla, color_tutorial, btn_tutorial, border_radius=12)
+        pygame.draw.rect(pantalla, color_marcador, btn_marcador, border_radius=12)
         pygame.draw.rect(pantalla, color_salir, btn_salir, border_radius=12)
 
         dibujar_texto(
@@ -142,7 +147,7 @@ while True:
         )
 
         dibujar_texto(
-            "TUTORIALES",
+            "MARCADOR",
             menu_fuente,
             BLANCO,
             "centro",
@@ -167,21 +172,25 @@ while True:
         )
 
         color_caso1 = AZUL if btn_caso1.collidepoint(mouse) else GRIS
-        color_caso2 = AZUL if btn_caso2.collidepoint(mouse) else GRIS
-        color_caso3 = AZUL if btn_caso3.collidepoint(mouse) else GRIS
-        color_caso4 = AZUL if btn_caso4.collidepoint(mouse) else GRIS
+        color_caso2 = (AZUL if btn_caso2.collidepoint(mouse) else GRIS) if estado_progreso["casos_desbloqueados"] >= 2 else (100, 30, 30)
+        color_caso3 = (AZUL if btn_caso3.collidepoint(mouse) else GRIS) if estado_progreso["casos_desbloqueados"] >= 3 else (100, 30, 30)
         color_volver = AZUL if btn_volver.collidepoint(mouse) else GRIS
 
         pygame.draw.rect(pantalla, color_caso1, btn_caso1, border_radius=12)
         pygame.draw.rect(pantalla, color_caso2, btn_caso2, border_radius=12)
         pygame.draw.rect(pantalla, color_caso3, btn_caso3, border_radius=12)
-        pygame.draw.rect(pantalla, color_caso4, btn_caso4, border_radius=12)
         pygame.draw.rect(pantalla, color_volver, btn_volver, border_radius=12)
 
         dibujar_texto("Caso 01 - La Caja Fuerte", menu_fuente, BLANCO, "centro", 240)
-        dibujar_texto("Caso 02", menu_fuente, BLANCO, "centro", 320)
-        dibujar_texto("Caso 03", menu_fuente, BLANCO, "centro", 400)
-        dibujar_texto("Caso 04", menu_fuente, BLANCO, "centro", 480)
+        
+        txt_c2 = "Caso 02 - Descubriendo la Verdad" if estado_progreso["casos_desbloqueados"] >= 2 else "Caso 02 (Bloqueado)"
+        color_txt2 = BLANCO if estado_progreso["casos_desbloqueados"] >= 2 else (150, 150, 150)
+        dibujar_texto(txt_c2, menu_fuente, color_txt2, "centro", 320)
+        
+        txt_c3 = "Caso 03 - La Confrontaci\u00f3n" if estado_progreso["casos_desbloqueados"] >= 3 else "Caso 03 (Bloqueado)"
+        color_txt3 = BLANCO if estado_progreso["casos_desbloqueados"] >= 3 else (150, 150, 150)
+        dibujar_texto(txt_c3, menu_fuente, color_txt3, "centro", 400)
+        
         dibujar_texto("Volver", menu_fuente, BLANCO, "centro", 570)
 
     elif estado_menu == "seleccion_dificultad":
@@ -202,6 +211,24 @@ while True:
         dibujar_texto("Dif\u00edcil", menu_fuente, BLANCO, "centro", 420)
         dibujar_texto("Volver", menu_fuente, BLANCO, "centro", 570)
 
+    elif estado_menu == "marcador":
+        dibujar_texto("MARCADOR", titulo_fuente, AMARILLO, "centro", 90)
+        
+        puntaje_total = sum(estado_progreso["puntajes_casos"].values())
+        dibujar_texto(f"Puntaje Total: {puntaje_total} pts", titulo_fuente, VERDE, "centro", 160)
+        
+        dibujar_texto(f"Caso 01 - La Caja Fuerte: {estado_progreso['puntajes_casos'][1]} pts", menu_fuente, BLANCO, "centro", 260)
+        
+        txt_c2 = f"Caso 02 - Descubriendo la Verdad: {estado_progreso['puntajes_casos'][2]} pts" if estado_progreso["casos_desbloqueados"] >= 2 else "Caso 02: ---"
+        dibujar_texto(txt_c2, menu_fuente, BLANCO if estado_progreso["casos_desbloqueados"] >= 2 else GRIS, "centro", 340)
+        
+        txt_c3 = f"Caso 03 - La Confrontaci\u00f3n: {estado_progreso['puntajes_casos'][3]} pts" if estado_progreso["casos_desbloqueados"] >= 3 else "Caso 03: ---"
+        dibujar_texto(txt_c3, menu_fuente, BLANCO if estado_progreso["casos_desbloqueados"] >= 3 else GRIS, "centro", 420)
+        
+        color_volver = AZUL if btn_volver.collidepoint(mouse) else GRIS
+        pygame.draw.rect(pantalla, color_volver, btn_volver, border_radius=12)
+        dibujar_texto("Volver", menu_fuente, BLANCO, "centro", 570)
+
     for evento in pygame.event.get():
 
         if evento.type == pygame.QUIT:
@@ -214,8 +241,8 @@ while True:
                 if btn_iniciar.collidepoint(evento.pos):
                     estado_menu = "seleccion_caso"
 
-                if btn_tutorial.collidepoint(evento.pos):
-                    print("Abriendo tutoriales...")
+                if btn_marcador.collidepoint(evento.pos):
+                    estado_menu = "marcador"
 
                 if btn_salir.collidepoint(evento.pos):
                     pygame.quit()
@@ -226,12 +253,17 @@ while True:
                     caso_seleccionado = 1
                     estado_menu = "seleccion_dificultad"
 
-                if btn_caso2.collidepoint(evento.pos):
-                    print("Iniciando Caso 02...")
-                if btn_caso3.collidepoint(evento.pos):
-                    print("Iniciando Caso 03...")
-                if btn_caso4.collidepoint(evento.pos):
-                    print("Iniciando Caso 04...")
+                if btn_caso2.collidepoint(evento.pos) and estado_progreso["casos_desbloqueados"] >= 2:
+                    caso_seleccionado = 2
+                    estado_menu = "seleccion_dificultad"
+                    
+                if btn_caso3.collidepoint(evento.pos) and estado_progreso["casos_desbloqueados"] >= 3:
+                    caso_seleccionado = 3
+                    estado_menu = "seleccion_dificultad"
+                if btn_volver.collidepoint(evento.pos):
+                    estado_menu = "principal"
+                    
+            elif estado_menu == "marcador":
                 if btn_volver.collidepoint(evento.pos):
                     estado_menu = "principal"
                     
@@ -248,10 +280,26 @@ while True:
                     
                 if dificultad_elegida is not None:
                     if caso_seleccionado == 1:
-                        resultado = caso1.ejecutar_caso1(pantalla, reloj, ANCHO, ALTO, dificultad_elegida)
-                        if resultado == "menu":
-                            estado_menu = "principal"
-                    # Aquí se agregarían los demás casos (ej: elif caso_seleccionado == 2)
+                        resultado = Caso1.ejecutar_caso1(pantalla, reloj, ANCHO, ALTO, dificultad_elegida, estado_progreso)
+                        if resultado == "caso_completado":
+                            estado_progreso["casos_desbloqueados"] = max(estado_progreso["casos_desbloqueados"], 2)
+                            mejor_puntaje = max(estado_progreso["puntajes_casos"][1], estado_progreso.get("ultimo_puntaje", 0))
+                            estado_progreso["puntajes_casos"][1] = mejor_puntaje
+                        estado_menu = "principal"
+                    elif caso_seleccionado == 2:
+                        resultado = Caso2.ejecutar_caso2(pantalla, reloj, ANCHO, ALTO, dificultad_elegida, estado_progreso)
+                        if resultado == "caso_completado":
+                            estado_progreso["casos_desbloqueados"] = max(estado_progreso["casos_desbloqueados"], 3)
+                            mejor_puntaje = max(estado_progreso["puntajes_casos"][2], estado_progreso.get("ultimo_puntaje", 0))
+                            estado_progreso["puntajes_casos"][2] = mejor_puntaje
+                        estado_menu = "principal"
+                    elif caso_seleccionado == 3:
+                        resultado = Caso3.ejecutar_caso3(pantalla, reloj, ANCHO, ALTO, dificultad_elegida, estado_progreso)
+                        if resultado == "caso_completado":
+                            estado_progreso["casos_desbloqueados"] = max(estado_progreso["casos_desbloqueados"], 4)
+                            mejor_puntaje = max(estado_progreso["puntajes_casos"][3], estado_progreso.get("ultimo_puntaje", 0))
+                            estado_progreso["puntajes_casos"][3] = mejor_puntaje
+                        estado_menu = "principal"
 
     pygame.display.flip()
     reloj.tick(60)

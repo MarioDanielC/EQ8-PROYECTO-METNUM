@@ -1,24 +1,34 @@
+# -*- coding: utf-8 -*-
 import pygame
 import sys
 import random
 import os
 import math
-from banco_problemas import banco
+from Banco_problemas import banco
 
 def centrar_x(texto_render, ancho_pantalla):
     return (ancho_pantalla - texto_render.get_width()) // 2
 
-def ejecutar_caso1(pantalla, reloj, ancho, alto, dificultad="facil"):
-    res = ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, 1)
+def ejecutar_caso1(pantalla, reloj, ancho, alto, dificultad="facil", progreso=None):
+    if progreso is None:
+        progreso = {"puntaje": 0}
+        
+    estado_juego = {
+        "vidas": 5 if dificultad == "facil" else (4 if dificultad == "intermedio" else 3),
+        "puntaje": 0
+    }
+    
+    res = ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, 1, estado_juego)
     if res == "siguiente_escenario":
-        res = ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, 2)
+        res = ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, 2, estado_juego)
         if res == "siguiente_escenario":
-            res = ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, 3)
+            res = ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, 3, estado_juego)
             if res == "siguiente_escenario":
-                return "menu"
-    return res
+                progreso["ultimo_puntaje"] = estado_juego["puntaje"]
+                return "caso_completado"
+    return "menu"
 
-def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase):
+def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase, estado_juego):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     
     # Fuentes
@@ -35,6 +45,7 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase):
     VERDE = (50, 200, 50)
     GRIS = (60, 60, 60)
     AMARILLO = (255, 200, 50)
+    AMARILLO_OSCURO = (180, 140, 0)
     
     # Selección aleatoria del problema
     problema = random.choice(banco)
@@ -73,26 +84,20 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase):
     btn_volver = pygame.Rect(ancho//2 - 150, alto - 100, 300, 60)
     btn_comisaria = pygame.Rect(ancho//2 - 150, alto - 100, 300, 60)
     
-    try:
-        icono_home = pygame.image.load(os.path.join(BASE_DIR, "fondos", "home.png")).convert_alpha()
-        icono_home = pygame.transform.scale(icono_home, (40, 40))
-        btn_menu_principal = pygame.Rect(20, alto - 60, 40, 40)
-    except FileNotFoundError:
-        icono_home = None
-        btn_menu_principal = pygame.Rect(20, alto - 60, 160, 40)
+    btn_menu_principal = pygame.Rect(20, alto - 70, 180, 50)
     
     btn_conf_si = pygame.Rect(ancho//2 - 160, alto//2 + 50, 140, 50)
     btn_conf_no = pygame.Rect(ancho//2 + 20, alto//2 + 50, 140, 50)
     
     try:
         if fase == 1:
-            fondo = pygame.image.load(os.path.join(BASE_DIR, "fondos", "cajafuerte.jpeg")).convert()
+            fondo = pygame.image.load(os.path.join(BASE_DIR, "imagenes", "cajafuerte.jpeg")).convert()
         elif fase == 2:
-            fondo = pygame.image.load(os.path.join(BASE_DIR, "fondos", "comisaria.png")).convert()
+            fondo = pygame.image.load(os.path.join(BASE_DIR, "imagenes", "comisaria.png")).convert()
         elif fase == 3:
-            fondo = pygame.image.load(os.path.join(BASE_DIR, "fondos", "interrogatorio.png")).convert()
+            fondo = pygame.image.load(os.path.join(BASE_DIR, "imagenes", "interrogatorio.png")).convert()
         else:
-            fondo = pygame.image.load(os.path.join(BASE_DIR, "fondos", "cajafuerte.jpeg")).convert()
+            fondo = pygame.image.load(os.path.join(BASE_DIR, "imagenes", "cajafuerte.jpeg")).convert()
         fondo = pygame.transform.scale(fondo, (ancho, alto))
     except FileNotFoundError:
         fondo = pygame.Surface((ancho, alto))
@@ -158,12 +163,26 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase):
                             es_correcta = True
                         else:
                             try:
-                                if abs(float(usr_val) - float(resp_correcta)) < 0.05:
+                                def parse_val(v):
+                                    if '/' in v:
+                                        partes = v.split('/')
+                                        return float(partes[0]) / float(partes[1])
+                                    return float(v)
+                                
+                                if abs(parse_val(usr_val) - parse_val(resp_correcta)) < 0.05:
                                     es_correcta = True
-                            except ValueError:
+                            except (ValueError, ZeroDivisionError):
                                 pass
                                 
                         if es_correcta:
+                            # Calcular puntaje: base 500 menos (segundos * 2)
+                            tiempo_actual = pygame.time.get_ticks()
+                            segs = (tiempo_actual - tiempo_inicio) // 1000
+                            pts = max(10, 500 - (segs * 2))
+                            if pista_revelada:
+                                pts //= 2
+                            estado_juego["puntaje"] += pts
+                            
                             paso_actual += 1
                             texto_usuario = ""
                             mensajes_error = ""
@@ -171,7 +190,11 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase):
                             if paso_actual >= len(pasos_finales):
                                 estado = "PISTA_ENCONTRADA"
                         else:
-                            mensajes_error = "Respuesta incorrecta. Intenta de nuevo."
+                            estado_juego["vidas"] -= 1
+                            if estado_juego["vidas"] <= 0:
+                                estado = "SIN_VIDAS"
+                            else:
+                                mensajes_error = f"Respuesta incorrecta. Te quedan {estado_juego['vidas']} vidas."
                     
                     elif btn_pista.collidepoint(evento.pos):
                         if not pista_revelada:
@@ -183,7 +206,7 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase):
                         corriendo = False
                         resultado_salida = "siguiente_escenario" # Para ir a la comisaría
                         
-                elif estado == "PISTA_NO_ENCONTRADA":
+                elif estado in ["PISTA_NO_ENCONTRADA", "SIN_VIDAS"]:
                     if btn_volver.collidepoint(evento.pos):
                         corriendo = False
                         resultado_salida = "menu"
@@ -200,12 +223,25 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase):
                         es_correcta = True
                     else:
                         try:
-                            if abs(float(usr_val) - float(resp_correcta)) < 0.05:
+                            def parse_val(v):
+                                if '/' in v:
+                                    partes = v.split('/')
+                                    return float(partes[0]) / float(partes[1])
+                                return float(v)
+                            
+                            if abs(parse_val(usr_val) - parse_val(resp_correcta)) < 0.05:
                                 es_correcta = True
-                        except ValueError:
+                        except (ValueError, ZeroDivisionError):
                             pass
                             
                     if es_correcta:
+                        tiempo_actual = pygame.time.get_ticks()
+                        segs = (tiempo_actual - tiempo_inicio) // 1000
+                        pts = max(10, 500 - (segs * 2))
+                        if pista_revelada:
+                            pts //= 2
+                        estado_juego["puntaje"] += pts
+                        
                         paso_actual += 1
                         texto_usuario = ""
                         mensajes_error = ""
@@ -213,7 +249,11 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase):
                         if paso_actual >= len(pasos_finales):
                             estado = "PISTA_ENCONTRADA"
                     else:
-                        mensajes_error = "Respuesta incorrecta. Intenta de nuevo."
+                        estado_juego["vidas"] -= 1
+                        if estado_juego["vidas"] <= 0:
+                            estado = "SIN_VIDAS"
+                        else:
+                            mensajes_error = f"Respuesta incorrecta. Te quedan {estado_juego['vidas']} vidas."
                 else:
                     if evento.unicode.isprintable():
                         texto_usuario += evento.unicode
@@ -223,11 +263,11 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase):
             if fase == 1:
                 tit = titulo_fuente.render("CASO 01: La Caja Fuerte", True, BLANCO)
                 lineas = [
-                    "Has encontrado una caja fuerte con un candado digital.",
-                    "Para abrirla, debes resolver el siguiente problema de",
-                    f"M\u00e9todo Num\u00e9rico: {problema['metodo']}",
+                    "Est\u00e1s investigando el robo del banco m\u00e1s grande de la",
+                    "ciudad. En la escena, has encontrado una caja fuerte.",
+                    "Para abrirla, debes resolver el siguiente m\u00e9todo:",
+                    f"{problema['metodo']}",
                     "",
-                    "Se te pedir\u00e1n pasos intermedios antes de la respuesta final.",
                     "Las pistas cuestan 4 minutos y te dar\u00e1n el procedimiento."
                 ]
             elif fase == 2:
@@ -268,9 +308,23 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase):
             txt_tiempo = titulo_fuente.render(f"{mins:02d}:{secs:02d}", True, color_tiempo)
             pantalla.blit(txt_tiempo, (ancho - 150, 20))
             
-            pygame.draw.rect(pantalla, AMARILLO, btn_pista, border_radius=5)
-            txt_pista = texto_fuente.render("Pista (-4 min)", True, NEGRO)
-            pantalla.blit(txt_pista, (btn_pista.x + 20, btn_pista.y + 5))
+            txt_vidas = texto_fuente.render(f"Vidas: {estado_juego['vidas']}", True, ROJO)
+            pantalla.blit(txt_vidas, (ancho - txt_vidas.get_width() - 30, alto - 80))
+            
+            txt_puntaje = texto_fuente.render(f"Puntaje: {estado_juego['puntaje']}", True, AMARILLO)
+            pantalla.blit(txt_puntaje, (ancho - txt_puntaje.get_width() - 30, alto - 40))
+            
+            if pista_revelada:
+                pygame.draw.rect(pantalla, (80, 80, 80), btn_pista, border_radius=5)
+                txt_pista = texto_fuente.render("Pista Usada", True, (160, 160, 160))
+            else:
+                color_pista = AMARILLO if btn_pista.collidepoint(mouse) else AMARILLO_OSCURO
+                pygame.draw.rect(pantalla, color_pista, btn_pista, border_radius=5)
+                txt_pista = texto_fuente.render("Pista (-4 min)", True, NEGRO)
+                
+            txt_p_x = btn_pista.x + (btn_pista.width - txt_pista.get_width()) // 2
+            txt_p_y = btn_pista.y + (btn_pista.height - txt_pista.get_height()) // 2
+            pantalla.blit(txt_pista, (txt_p_x, txt_p_y))
             
             tit_datos = titulo_fuente.render(f"M\u00e9todo: {problema['metodo']}", True, AZUL)
             pantalla.blit(tit_datos, (centrar_x(tit_datos, ancho), 30))
@@ -342,7 +396,18 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase):
             tit = titulo_fuente.render("Tiempo Agotado", True, ROJO)
             pantalla.blit(tit, (centrar_x(tit, ancho), 150))
             
-            msg = texto_fuente.render("No pudiste abrir la caja fuerte a tiempo.", True, BLANCO)
+            msg = texto_fuente.render("No pudiste resolverlo a tiempo.", True, BLANCO)
+            pantalla.blit(msg, (centrar_x(msg, ancho), 250))
+            
+            pygame.draw.rect(pantalla, AZUL, btn_volver, border_radius=10)
+            txt_btn = texto_fuente.render("Volver al Men\u00fa Principal", True, BLANCO)
+            pantalla.blit(txt_btn, (centrar_x(txt_btn, ancho), btn_volver.y + 15))
+            
+        elif estado == "SIN_VIDAS":
+            tit = titulo_fuente.render("\u00a1Juego Terminado!", True, ROJO)
+            pantalla.blit(tit, (centrar_x(tit, ancho), 150))
+            
+            msg = texto_fuente.render("Te has quedado sin vidas.", True, BLANCO)
             pantalla.blit(msg, (centrar_x(msg, ancho), 250))
             
             pygame.draw.rect(pantalla, AZUL, btn_volver, border_radius=10)
@@ -364,22 +429,28 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase):
             msg = titulo_fuente.render("\u00bfSeguro que deseas salir?", True, BLANCO)
             pantalla.blit(msg, (centrar_x(msg, ancho), alto//2 - 60))
             
-            pygame.draw.rect(pantalla, ROJO, btn_conf_si, border_radius=10)
-            txt_si = texto_fuente.render("S\u00ed", True, BLANCO)
-            pantalla.blit(txt_si, (btn_conf_si.x + (140 - txt_si.get_width())//2, btn_conf_si.y + 10))
+            ROJO_OPACO = (160, 60, 60)
+            AZUL_OPACO = (60, 90, 170)
             
-            pygame.draw.rect(pantalla, AZUL, btn_conf_no, border_radius=10)
+            pygame.draw.rect(pantalla, ROJO_OPACO, btn_conf_si, border_radius=10)
+            txt_si = texto_fuente.render("S\u00ed", True, BLANCO)
+            txt_si_x = btn_conf_si.x + (btn_conf_si.width - txt_si.get_width()) // 2
+            txt_si_y = btn_conf_si.y + (btn_conf_si.height - txt_si.get_height()) // 2
+            pantalla.blit(txt_si, (txt_si_x, txt_si_y))
+            
+            pygame.draw.rect(pantalla, AZUL_OPACO, btn_conf_no, border_radius=10)
             txt_no = texto_fuente.render("No", True, BLANCO)
-            pantalla.blit(txt_no, (btn_conf_no.x + (140 - txt_no.get_width())//2, btn_conf_no.y + 10))
+            txt_no_x = btn_conf_no.x + (btn_conf_no.width - txt_no.get_width()) // 2
+            txt_no_y = btn_conf_no.y + (btn_conf_no.height - txt_no.get_height()) // 2
+            pantalla.blit(txt_no, (txt_no_x, txt_no_y))
 
         if estado != "CONFIRMAR_SALIDA":
-            if icono_home:
-                pygame.draw.rect(pantalla, ROJO, btn_menu_principal, border_radius=8)
-                pantalla.blit(icono_home, (btn_menu_principal.x, btn_menu_principal.y))
-            else:
-                pygame.draw.rect(pantalla, ROJO, btn_menu_principal, border_radius=8)
-                txt_menu = texto_pista_fuente.render("Men\u00fa Principal", True, BLANCO)
-                pantalla.blit(txt_menu, (btn_menu_principal.x + 10, btn_menu_principal.y + 10))
+            color_btn_home = AMARILLO if btn_menu_principal.collidepoint(pygame.mouse.get_pos()) else AMARILLO_OSCURO
+            pygame.draw.rect(pantalla, color_btn_home, btn_menu_principal, border_radius=8)
+            txt_menu = texto_fuente.render("Men\u00fa Principal", True, NEGRO)
+            txt_x = btn_menu_principal.x + (btn_menu_principal.width - txt_menu.get_width()) // 2
+            txt_y = btn_menu_principal.y + (btn_menu_principal.height - txt_menu.get_height()) // 2
+            pantalla.blit(txt_menu, (txt_x, txt_y))
 
         pygame.display.flip()
         reloj.tick(60)
