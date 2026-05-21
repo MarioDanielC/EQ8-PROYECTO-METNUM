@@ -347,11 +347,39 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase, estado_juego):
             tit_datos = titulo_fuente.render(f"M\u00e9todo: {problema['metodo']}", True, AZUL)
             pantalla.blit(tit_datos, (centrar_x(tit_datos, ancho), 30))
             
-            txt_prob = texto_fuente.render(problema["problema"], True, BLANCO)
-            pantalla.blit(txt_prob, (centrar_x(txt_prob, ancho), 80))
+            # Dibujar problema (con soporte para múltiples líneas con \n)
+            y_actual = 80
+            if "\n" in problema["problema"]:
+                lineas_prob = problema["problema"].split("\n")
+                for linea in lineas_prob:
+                    txt_prob = texto_fuente.render(linea, True, BLANCO)
+                    pantalla.blit(txt_prob, (centrar_x(txt_prob, ancho), y_actual))
+                    y_actual += 25
+            else:
+                txt_prob = texto_fuente.render(problema["problema"], True, BLANCO)
+                pantalla.blit(txt_prob, (centrar_x(txt_prob, ancho), y_actual))
+                y_actual += 30
             
-            txt_val = texto_fuente.render(problema["valores"], True, VERDE)
-            pantalla.blit(txt_val, (centrar_x(txt_val, ancho), 110))
+            # Dibujar valores (con soporte para múltiples líneas con \n)
+            if "\n" in problema["valores"]:
+                lineas_val = problema["valores"].split("\n")
+                for linea in lineas_val:
+                    txt_val = texto_fuente.render(linea, True, VERDE)
+                    pantalla.blit(txt_val, (centrar_x(txt_val, ancho), y_actual))
+                    y_actual += 25
+            else:
+                txt_val = texto_fuente.render(problema["valores"], True, VERDE)
+                pantalla.blit(txt_val, (centrar_x(txt_val, ancho), y_actual))
+                y_actual += 30
+            
+            # Dibujar fórmula si existe
+            if "formula" in problema:
+                y_actual += 10
+                lineas_formula = problema["formula"] if isinstance(problema["formula"], list) else problema["formula"].split("\n")
+                for linea in lineas_formula:
+                    txt_form = texto_fuente.render(linea, True, BLANCO)
+                    pantalla.blit(txt_form, (centrar_x(txt_form, ancho), y_actual))
+                    y_actual += 25
             
             inst_txt = texto_fuente.render(f"Paso {paso_actual+1}/{len(pasos_finales)} - {pasos_finales[paso_actual]['pregunta']}", True, AMARILLO)
             pantalla.blit(inst_txt, (centrar_x(inst_txt, ancho), 460))
@@ -381,7 +409,7 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase, estado_juego):
             
             if pista_revelada:
                 p_txt = texto_pista_fuente.render("Pista: " + pasos_finales[paso_actual]["pista"], True, AMARILLO)
-                pantalla.blit(p_txt, (centrar_x(p_txt, ancho), 160))
+                pantalla.blit(p_txt, (centrar_x(p_txt, ancho), y_actual + 15))
                 
         elif estado == "PISTA_ENCONTRADA":
             if fase == 1:

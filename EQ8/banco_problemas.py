@@ -1,7 +1,4 @@
 # banco_problemas.py
-# Este archivo contiene el banco de problemas extraídos exactamente del libro de la maestra.
-# Se respeta estrictamente la nomenclatura, símbolos y procedimientos originales.
-# Cada problema cuenta ahora con "pasos_juego", un arreglo dinamico con los pasos que mejor representan su metodo.
 
 banco = [
     {
@@ -71,8 +68,10 @@ banco = [
             "g(x) = 2.714444444"
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula la 1ra diferencia finita \u0394'1", "pista": "Resta y2 - y1", "respuesta": "0.28"},
-            {"pregunta": "Calcula la 2da diferencia finita \u0394\u00b21", "pista": "Resta \u0394'2 - \u0394'1", "respuesta": "0.11"},
+            {"pregunta": "Calcula la 1ra diferencia de primer orden \u0394'1", "pista": "Resta y2 - y1", "respuesta": "0.28"},
+            {"pregunta": "Calcula la 2da diferencia de primer orden \u0394'2", "pista": "Resta y3 - y2", "respuesta": "0.39"},
+            {"pregunta": "Calcula la 1ra diferencia de segundo orden \u0394\u00b21", "pista": "Resta \u0394'2 - \u0394'1", "respuesta": "0.11"},
+            {"pregunta": "Calcula el valor de s", "pista": "s = (x - x1) / h", "respuesta": "0.666666666"},
             {"pregunta": "Calcula la respuesta final de g(x)", "pista": "Aplica el polinomio de Newton hacia adelante.", "respuesta": "2.714444444"}
         ],
         "respuesta_final": "2.714444444"
@@ -83,18 +82,18 @@ banco = [
         "problema": "Obtener g(x) para x = 2.4",
         "valores": "X1=2.2 (y1=2.54), X2=2.5 (y2=2.82), X3=2.8 (y3=3.21)",
         "procedimiento": [
-            "∇'2 = y2 - y1 = 2.82 - 2.54 = 0.28",
-            "∇'1 = y3 - y2 = 3.21 - 2.82 = 0.39",
-            "∇²1 = ∇'2 - ∇'1 = 0.39 - 0.28 = 0.11",
+            "▽'2 = y2 - y1 = 2.82 - 2.54 = 0.28",
+            "▽'1 = y3 - y2 = 3.21 - 2.82 = 0.39",
+            "▽²1 = ▽'2 - ▽'1 = 0.39 - 0.28 = 0.11",
             "s = (x - xi) / h = (2.4 - 2.8) / 0.3 = -1.33333333333",
-            "g(x) = yi[s_0] + ∇'f(xi)[s_1] + ∇²f(xi)[ (s(s+1)) / 2! ]",
+            "g(x) = yi[s_0] + ▽'f(xi)[s_1] + ▽²f(xi)[ (s(s+1)) / 2! ]",
             "g(x) = 3.21(1) + (0.39)(-1.33333333333) + (0.11)[ (-1.33333333333(-1.33333333333 + 1)) / 2! ]",
             "g(x) = 2.714444444"
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula ∇'2", "pista": "Resta y2 - y1", "respuesta": "0.28"},
-            {"pregunta": "Calcula ∇'1", "pista": "Resta y3 - y2", "respuesta": "0.39"},
-            {"pregunta": "Calcula ∇²1", "pista": "Resta ∇'1 - ∇'2", "respuesta": "0.11"},
+            {"pregunta": "Calcula ▽'2", "pista": "Resta y2 - y1", "respuesta": "0.28"},
+            {"pregunta": "Calcula ▽'1", "pista": "Resta y3 - y2", "respuesta": "0.39"},
+            {"pregunta": "Calcula ▽²1", "pista": "Resta ▽'1 - ▽'2", "respuesta": "0.11"},
             {"pregunta": "Calcula s", "pista": "s = (x - xi) / h, donde xi es el último valor.", "respuesta": "-1.33333333333"},
             {"pregunta": "Calcula la respuesta final de g(x)", "pista": "Aplica el polinomio de Newton hacia atrás.", "respuesta": "2.714444444"}
         ],
@@ -105,6 +104,12 @@ banco = [
         "metodo": "Newton con Diferencias Divididas",
         "problema": "Encuentre g(x) para x = 3.5",
         "valores": "Xi: 4.4, 3.7, 3.1 | yi: -0.68, -1.59, -1.82",
+        "formula": [
+            "g(x) = D⁰ + D1¹(x - x1) + D1²(x - x1)(x - x2)",
+            "D1¹ = (y2 - y1) / (x2 - x1)",
+            "D2¹ = (y3 - y2) / (x3 - x2)",
+            "D1² = (D2¹ - D1¹) / (x3 - x1)"
+        ],
         "procedimiento": [
             "h1 = |x2 - x1| = |3.7 - 4.4| = 0.7",
             "h2 = |x3 - x2| = |3.1 - 3.7| = 0.6",
@@ -116,10 +121,10 @@ banco = [
             "g(x) = -1.723076923"
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula la 1ra diferencia dividida D1¹", "pista": "D1¹ = (y2 - y1) / (x2 - x1)", "respuesta": "1.3"},
-            {"pregunta": "Calcula la 1ra diferencia dividida D2¹", "pista": "D2¹ = (y3 - y2) / (x3 - x2)", "respuesta": "0.38333333"},
-            {"pregunta": "Calcula la 2da diferencia dividida D1²", "pista": "D1² = (D2¹ - D1¹) / (x3 - x1)", "respuesta": "0.705128205"},
-            {"pregunta": "Calcula la respuesta final de g(x)", "pista": "Aplica el polinomio con D⁰, D1¹ y D1²", "respuesta": "-1.723076923"}
+            {"pregunta": "Calcula la 1ra diferencia dividida D1¹", "pista": "Usa los primeros dos puntos de la tabla: (4.4, -0.68) y (3.7, -1.59).", "respuesta": "1.3"},
+            {"pregunta": "Calcula la 1ra diferencia dividida D2¹", "pista": "Usa los dos últimos puntos de la tabla: (3.7, -1.59) y (3.1, -1.82).", "respuesta": "0.38333333"},
+            {"pregunta": "Calcula la 2da diferencia dividida D1²", "pista": "Usa las diferencias de primer orden calculadas y divídelas entre el cambio total (x3 - x1).", "respuesta": "0.705128205"},
+            {"pregunta": "Calcula g(x)", "pista": "Sustituye los valores obtenidos en la fórmula para g(x) con x= 3.5", "respuesta": "-1.723076923"}
         ],
         "respuesta_final": "-1.723076923"
     },
@@ -165,9 +170,9 @@ banco = [
             {"pregunta": "Calcula el valor de Y cuando X=1", "pista": "Sustituye X=1 en la ecuación.", "respuesta": "-3.5"},
             {"pregunta": "Calcula el valor de Y cuando X=2", "pista": "Sustituye X=2 en la ecuación.", "respuesta": "-3"},
             {"pregunta": "Calcula el valor de Y cuando X=3", "pista": "Sustituye X=3 en la ecuación.", "respuesta": "9.5"},
-            {"pregunta": "¿Entre qué intervalos de X hay cambios de signo?", "pista": "Escribe solamente los incisos con el formato [X, Y], [X, Y], [X, Y]", "respuesta": "[-3, -2], [0, 1], [2, 3]"}
+            {"pregunta": "¿Cuántas raices tiene la función?", "pista": "Observa los cambios de signo en Y", "respuesta": "3"}
         ],
-        "respuesta_final": "[-3, -2], [0, 1], [2, 3]"
+        "respuesta_final": "3"
     },
     {
         "id": 8,
@@ -184,7 +189,7 @@ banco = [
             "E = |xi+1 - xi| = 0.001"
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula X en la primera iteración (a=0, b=1)", "pista": "X = (a+b)/2", "respuesta": "0.5"},
+            {"pregunta": "Calcula X en la primera iteración (a=0, b=1)", "pista": "Sustituye los valores en la fórmula de x", "respuesta": "0.5"},
             {"pregunta": "Calcula X en la iteración 2", "pista": "Nuevo intervalo a=0, b=0.5", "respuesta": "0.25"},
             {"pregunta": "Calcula X en la iteración 3", "pista": "Nuevo intervalo a=0.25, b=0.5", "respuesta": "0.375"},
             {"pregunta": "Calcula X en la iteración 4", "pista": "Nuevo intervalo a=0.25, b=0.375", "respuesta": "0.3125"},
@@ -220,6 +225,10 @@ banco = [
         "metodo": "Newton - Raphson",
         "problema": "Encuentre la raíz real de la ecuación f(x) = 0.8x² + x - 3",
         "valores": "i=0, xo = 1",
+        "formula": [
+            "xi+1 = xi - ( f(xi) / f'(xi) )",
+            "E = |xi+1 - xi|"
+        ],
         "procedimiento": [
             "f'(x) = 1.6x + 1",
             "i=0, xo = 1",
@@ -229,9 +238,10 @@ banco = [
             "i=4, x4 = 1.409852675 - ( (0.8(1.409852675)² + (1.409852675) - 3) / (1.6(1.409852675) + 1) ) = 1.409852575 | E = |1.409852575 - 1.409852675| = 0.0000001"
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula X1", "pista": "xi - f(xi)/f'(xi) para i=0", "respuesta": "1.461538462"},
-            {"pregunta": "Calcula X2", "pista": "xi - f(xi)/f'(xi) para i=1", "respuesta": "1.410492733"},
-            {"pregunta": "Calcula la raíz final (X4)", "pista": "Donde el error es casi cero.", "respuesta": "1.409852575"}
+            {"pregunta": "Calcula X1", "pista": "Sustituye el valor inicial xo = 1 en la fórmula. Evalúa f(1) y f'(1).", "respuesta": "1.461538462"},
+            {"pregunta": "Calcula X2", "pista": "Usa x1 para iterar y calcula la diferencia absoluta para verificar el error.", "respuesta": "1.410492733"},
+            {"pregunta": "Calcula X3", "pista": "Sigue el proceso con x2. El error aproximado es de 0.00064.", "respuesta": "1.409852675"},
+            {"pregunta": "Calcula la raíz final (X4)", "pista": "Realiza la última iteración con x3. El error absoluto final es de 0.0000001.", "respuesta": "1.409852575"}
         ],
         "respuesta_final": "1.409852575"
     },
@@ -240,6 +250,10 @@ banco = [
         "metodo": "Falsa Posición ó Regula - Falsi",
         "problema": "Calcule la raíz para f(x) = xe^x - 10",
         "valores": "a=1, b=2",
+        "formula": [
+            "x = a - ( (f(a) * (b - a)) / (f(b) - f(a)) )",
+            "E = |xi+1 - xi|"
+        ],
         "procedimiento": [
             "a=1, f(a)=-7.281718172",
             "b=2, f(b)=4.778112190",
@@ -252,12 +266,13 @@ banco = [
             "E = 0.000527473"
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula f(a) para a=1", "pista": "Evalúa 1 en la función.", "respuesta": "-7.281718172"},
-            {"pregunta": "Calcula f(b) para b=2", "pista": "Evalúa 2 en la función.", "respuesta": "4.778112190"},
-            {"pregunta": "Calcula la aproximación X (i=0)", "pista": "Aplica la fórmula de Regula Falsi en la i=0.", "respuesta": "1.603799386"},
-            {"pregunta": "Calcula la aproximación X (i=1)", "pista": "Aplica la fórmula en la i=1.", "respuesta": "1.721776248"},
-            {"pregunta": "Calcula la aproximación X (i=2)", "pista": "Aplica la fórmula en la i=2.", "respuesta": "1.741651888"},
-            {"pregunta": "Calcula la raíz final aproximada", "pista": "La iteración donde E = 0.000527473", "respuesta": "1.745425782"}
+            {"pregunta": "Calcula f(a) para a=1", "pista": "Evalúa a = 1 en la función ", "respuesta": "-7.281718172"},
+            {"pregunta": "Calcula f(b) para b=2", "pista": "Evalúa b = 2 en la función ", "respuesta": "4.778112190"},
+            {"pregunta": "Calcula la aproximación X (i=0)", "pista": "Sustituye a = 1, b = 2, f(a) y f(b) en la fórmula de Regula-Falsi.", "respuesta": "1.603799386"},
+            {"pregunta": "Calcula la aproximación X (i=1)", "pista": "Como f(1.603799) es negativo, actualiza el límite inferior: a = 1.603799386. Mantén b = 2 y vuelve a aplicar la fórmula.", "respuesta": "1.721776248"},
+            {"pregunta": "Calcula la aproximación X (i=2)", "pista": "El nuevo valor de f(a) sigue siendo negativo. Actualiza a = 1.721776248 y mantén b = 2.", "respuesta": "1.741651888"},
+            {"pregunta": "Calcula la aproximación X (i=3)", "pista": "Actualiza a = 1.741651888 con b = 2. El error aproximado absoluto ya bajó a 0.0032.", "respuesta": "1.744898309"},
+            {"pregunta": "Calcula la raíz final aproximada", "pista": "Sustituye a = 1.744898309 y b = 2. Alcanzarás el error absoluto final de 0.000527473.", "respuesta": "1.745425782"}
         ],
         "respuesta_final": "1.745425782"
     },
@@ -266,28 +281,32 @@ banco = [
         "metodo": "Secante",
         "problema": "Calcule la raíz de f(x) = e^(-x) - x.",
         "valores": "x0 = 0, x1 = 1",
+        "formula": [
+            "xi+1 = xi+1 - ( (f(xi+1) * (xi+1 - xi)) / (f(xi+1) - f(xi)) )",
+            "Error = |xi+1 - xi| = 0.001"
+        ],
         "procedimiento": [
             "x0 = 0, f(x0) = e^(-0) - 0 = 1",
             "x1 = 1, f(x1) = e^(-1) - 1 = -0.632120558",
             "i=2, x2 = x1 - (f(x1)(x1 - x0)) / (f(x1) - f(x0)) = 1 - {(-0.632120558(1 - 0)) / (-0.632120558 - 1)} = 0.612699836, E = |0.612699836 - 1| = 0.387300613",
             "i=3, x3 = x2 - (f(x2)(x2 - x1)) / (f(x2) - f(x1)) = 0.612699836 - {(-0.070813947(0.612699836 - 1)) / (-0.070813947 - (-0.632120558))} = 0.563838389, E = |0.563838389 - 0.612699836| = 0.048861447",
-            "i=4, x4 = 0.563838423 - {(-0.00004241924099(0.5638389 - 0.612699836)) / (0.005182354419 - (-0.070813946))} = 0.567170358, E = |0.567170358 - 0.563838389| = 0.003331969259",
+            "i=4, x4 = 0.563838423 - {(-0.00004241924099(0.563838389 - 0.612699836)) / (0.005182354419 - (-0.070813946))} = 0.567170358, E = |0.567170358 - 0.563838389| = 0.003331969259",
             "i=5, X5 = x4 - (f(x4)(x4 - x3)) / (f(x4) - f(x3)) = 0.567170358 - {(-0.00004241924099(0.567170358 - 0.563838389)) / (-0.00004241924099 - 0.005182354419)} = 0.567143306, E = |0.567143306 - 0.567170358| = 0.00002705181386"
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula f(x0)", "pista": "Evalúa x0 en la función.", "respuesta": "1"},
-            {"pregunta": "Calcula f(x1)", "pista": "Evalúa x1 en la función.", "respuesta": "-0.632120558"},
-            {"pregunta": "Calcula X2", "pista": "Aplica la fórmula de la Secante para i=2.", "respuesta": "0.612699836"},
-            {"pregunta": "Calcula X3", "pista": "Aplica la fórmula de la Secante para i=3.", "respuesta": "0.563838389"},
-            {"pregunta": "Calcula X4", "pista": "Aplica la fórmula de la Secante para i=4.", "respuesta": "0.567170358"},
-            {"pregunta": "Calcula la raíz final (X5)", "pista": "Iteración final.", "respuesta": "0.567143306"}
+            {"pregunta": "Calcula f(x0)", "pista": "Evalúa el primer punto inicial x0 = 0 en f(x) = e^(-x) - x.", "respuesta": "1"},
+            {"pregunta": "Calcula f(x1)", "pista": "Evalúa el segundo punto inicial x1 = 1 en f(x) = e^(-x) - x.", "respuesta": "-0.632120558"},
+            {"pregunta": "Calcula X2", "pista": "Aplica la fórmula de la secante usando x0 = 0, x1 = 1 y sus respectivas evaluaciones f(x0) y f(x1).", "respuesta": "0.612699836"},
+            {"pregunta": "Calcula X3", "pista": "Utiliza los dos valores anteriores: x1 = 1 con f(x1) = -0.632120558, y x2 = 0.6126998 con f(x2) = -0.070813947.", "respuesta": "0.563838389"},
+            {"pregunta": "Calcula X4", "pista": "Utiliza x2 = 0.6126998 y x3 = 0.5638383, con sus respectivas evaluaciones en la función.", "respuesta": "0.567170358"},
+            {"pregunta": "Calcula la raíz final (X5)", "pista": "Sustituye x3 y x4 en la fórmula. El error absoluto final descenderá hasta 0.000027, logrando la convergencia por debajo de la tolerancia de 0.001.", "respuesta": "0.567143306"}
         ],
         "respuesta_final": "0.567143306"
     },
     {
         "id": 13,
         "metodo": "Montante",
-        "problema": "Resolver: 2a + 5b - 2c = 1 | -a + 2b + 3c = 2 | 3a - 3b + 2c = 3",
+        "problema": "Resolver:\n2a + 5b - 2c = 1\n-a + 2b + 3c = 2\n3a - 3b + 2c = 3",
         "valores": "Matriz inicial 3x4",
         "procedimiento": [
             "Matriz Inicial: [2 5 -2 1], [-1 2 3 2], [3 -3 2 3]",
@@ -311,7 +330,7 @@ banco = [
     {
         "id": 14,
         "metodo": "Gauss - Jordán",
-        "problema": "Resolver: 3a - 2b + 2c = 1 | 4a + 2b + 2c = 2 | 3a - 3b + 3c = 3",
+        "problema": "Resolver:\n3a - 2b + 2c = 1\n4a + 2b + 2c = 2\n3a - 3b + 3c = 3",
         "valores": "Matriz inicial 3x4",
         "procedimiento": [
             "Matriz Inicial: [3 -2 2 | 1], [4 2 2 | 2], [3 -3 3 | 3]",
@@ -335,7 +354,7 @@ banco = [
     {
         "id": 15,
         "metodo": "Eliminación Gaussiana",
-        "problema": "Resolver: 2x1 + x2 - 3x3 = -1 | -x1 + 3x2 + 2x3 = 12 | 3x1 + x2 - 3x3 = 0",
+        "problema": "Resolver:\n2x1 + x2 - 3x3 = -1\n-x1 + 3x2 + 2x3 = 12\n3x1 + x2 - 3x3 = 0",
         "valores": "Matriz inicial 3x4",
         "procedimiento": [
             "Procedimiento (matrices sucesivas):",
@@ -348,8 +367,8 @@ banco = [
             "2x1 + x2 - 3x3 = -1 => 2x1 = -1 - x2 + 3x3 => x1 = (-1 - 3 + 3(2)) / 2 => x1 = 1"
         ],
         "pasos_juego": [
-            {"pregunta": "Pivote fila 2 (reducido)", "pista": "Término en 2,2 después de ceros.", "respuesta": "7/2"},
-            {"pregunta": "Pivote fila 3 (reducido)", "pista": "Término en 3,3 después de ceros.", "respuesta": "11/7"},
+            {"pregunta": "Pivote fila 2 (reducido)", "pista": "Término en 2,2 en la matriz reducida.", "respuesta": "7/2"},
+            {"pregunta": "Pivote fila 3 (reducido)", "pista": "Término en 3,3 en la matriz reducida.", "respuesta": "11/7"},
             {"pregunta": "Calcula el valor de x3", "pista": "Sustitución hacia atrás.", "respuesta": "2"},
             {"pregunta": "Calcula el valor de x2", "pista": "Sustitución hacia atrás.", "respuesta": "3"},
             {"pregunta": "Calcula el valor de x1", "pista": "Sustitución hacia atrás.", "respuesta": "1"}
@@ -359,85 +378,166 @@ banco = [
     {
         "id": 16,
         "metodo": "Gauss - Seidel",
-        "problema": "x - 3y + 5z = 5 | 8x - y - z = 8 | -2x + 4y + z = 4",
-        "valores": "x0 = y0 = z0 = 0",
+        "problema": "Resolver:\nx - 3y + 5z = 5\n8x - y - z = 8\n-2x + 4y + z = 4",
+        "valores": "x0 = y0 = z0 = 0\nBuscando un error de 0.001 en las tres variables",
         "procedimiento": [
             "Despejando las variables para la Diagonal Dominante:",
             "x = (8+y+z)/8, y = (4+2x-z)/4, z = (5-x+3y)/5",
-            "1era. Iteración:",
-            "x1 = (8+0+0)/8 = 1 | y1 = (4+2(1)-0)/4 = 1.5 | z1 = (5-1+3(1.5))/5 = 1.7",
-            "2da. Iteración:",
-            "x2 = (8+1.5+1.7)/8 = 1.4 | y2 = (4+2(1.4)-1.7)/4 = 1.275 | z2 = (5-1.4+3(1.275))/5 = 1.485",
-            "(Las iteraciones continúan hasta cumplir E = 0.001 en la iteración 5)"
+            "1era. Iteración: Con y0 = 0 y z0 = 0:",
+            "x1 = (8+0+0)/8 = 1",
+            "y1 = (4+2(1)-0)/4 = 1.5",
+            "z1 = (5-1+3(1.5))/5 = 1.7",
+            "2da. Iteración: Con y1 = 1.5 y z1 = 1.7:",
+            "x2 = (8+1.5+1.7)/8 = 1.4",
+            "y2 = (4+2(1.4)-1.7)/4 = 1.275",
+            "z2 = (5-1.4+3(1.275))/5 = 1.485",
+            "3era. Iteración: Con y2 = 1.275 y z2 = 1.485:",
+            "x3 = (8+1.275+1.485)/8 = 1.345",
+            "y3 = (4+2(1.345)-1.485)/4 = 1.30125",
+            "z3 = (5-1.345+3(1.30125))/5 = 1.51175",
+            "4ta. Iteración: Con y3 = 1.30125 y z3 = 1.51175:",
+            "x4 = (8+1.30125+1.51175)/8 = 1.351625",
+            "y4 = (4+2(1.351625)-1.51175)/4 = 1.297875",
+            "z4 = (5-1.351625+3(1.297875))/5 = 1.5084",
+            "5ta. Iteración: Con y4 = 1.297875 y z4 = 1.5084:",
+            "x5 = (8+1.297875+1.5084)/8 = 1.350784375",
+            "y5 = (4+2(1.350784375)-1.5084)/4 = 1.298292188",
+            "z5 = (5-1.350784375+3(1.298292188))/5 = 1.508818438",
+            "Errores absolutos en la 5ta. iteración:",
+            "Ex = |1.350784375 - 1.351625| = 0.000840625 < 0.001",
+            "Ey = |1.298292188 - 1.297875| = 0.000417188 < 0.001",
+            "Ez = |1.508818438 - 1.5084| = 0.000418438 < 0.001",
+            "Como todos los errores son menores a 0.001, el método converge."
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula x1 en la primera iteración", "pista": "x = (8+y+z)/8", "respuesta": "1"},
-            {"pregunta": "Calcula y1 en la primera iteración", "pista": "y = (4+2x-z)/4", "respuesta": "1.5"},
-            {"pregunta": "Escribe el texto exacto de conclusión", "pista": "Iteración 5...", "respuesta": "Iteración 5 converge a la respuesta"}
+            {"pregunta": "Calcula x1 en la primera iteración", "pista": "Despeja x de la segunda ecuación y sustituye los valores iniciales y0=0, z0=0.", "respuesta": "1"},
+            {"pregunta": "Calcula y1 en la primera iteración", "pista": "Despeja y de la tercera ecuación. Recuerda usar el valor de x1 recién calculado (x1 = 1) y z0=0.", "respuesta": "1.5"},
+            {"pregunta": "Calcula z1 en la primera iteración", "pista": "Despeja z de la primera ecuación. Recuerda usar los valores más recientes calculados (x1 = 1, y1 = 1.5).", "respuesta": "1.7"},
+            {"pregunta": "¿A cuántas iteraciones se llegó a los margenes de error deseados?", "pista": "Revisa el desglose de las iteraciones en el procedimiento. ¿En qué iteración todos los errores absolutos (Ex, Ey, Ez) son menores a 0.001?", "respuesta": "5"},
+            {"pregunta": "Calcula el valor final de x (x5)", "pista": "Obtenido en la iteración 5 usando y4 = 1.297875 y z4 = 1.5084.", "respuesta": "1.350784375"},
+            {"pregunta": "Calcula el valor final de y (y5)", "pista": "Obtenido en la iteración 5 usando el valor recién calculado de x5 = 1.350784375 y z4 = 1.5084.", "respuesta": "1.298292188"},
+            {"pregunta": "Calcula el valor final de z (z5)", "pista": "Obtenido en la iteración 5 usando los valores más recientes x5 = 1.350784375 y y5 = 1.298292188.", "respuesta": "1.508818438"},
+            {"pregunta": "Calcula el error absoluto final en x (Ex)", "pista": "Aplica Ex = |x5 - x4|, donde x4 = 1.351625 y x5 = 1.350784375.", "respuesta": "0.000840625"},
+            {"pregunta": "Calcula el error absoluto final en y (Ey)", "pista": "Aplica Ey = |y5 - y4|, donde y4 = 1.297875 y y5 = 1.298292188.", "respuesta": "0.000417188"},
+            {"pregunta": "Calcula el error absoluto final en z (Ez)", "pista": "Aplica Ez = |z5 - z4|, donde z4 = 1.5084 y z5 = 1.508818438.", "respuesta": "0.000418438"}
         ],
-        "respuesta_final": "Iteración 5 converge a la respuesta"
+        "respuesta_final": "x5 = 1.350784375, y5 = 1.298292188, z5 = 1.508818438"
     },
     {
         "id": 17,
         "metodo": "Jacobi",
-        "problema": "x - 3y + 5z = 5 | 8x - y - z = 8 | -2x + 4y + z = 4",
-        "valores": "x0 = y0 = z0 = 1",
+        "problema": "Resolver:\nx - 3y + 5z = 5\n8x - y - z = 8\n-2x + 4y + z = 4",
+        "valores": "x0 = y0 = z0 = 1\nBuscando un error de 0.001 en las tres variables",
         "procedimiento": [
-            "Despejando:",
+            "Despejando las variables para la Diagonal Dominante:",
             "x = (8+y+z)/8, y = (4+2x-z)/4, z = (5-x+3y)/5",
-            "1era. Iteración:",
-            "x1 = (8+1+1)/8 = 1.25 | y1 = (4+2(1)-1)/4 = 1.25 | z1 = (5-1+3(1))/5 = 1.4",
-            "2da. Iteración:",
-            "x2 = (8+1.25+1.4)/8 = 1.33125 | y2 = (4+2(1.25)-1.4)/4 = 1.275 | z2 = (5-1.25+3(1.25))/5 = 1.5",
-            "(El proceso se repite en paralelo hasta converger)"
+            "1era. Iteración: Con y0 = 1 y z0 = 1:",
+            "x1 = (8+1+1)/8 = 1.25",
+            "y1 = (4+2(1)-1)/4 = 1.25",
+            "z1 = (5-1+3(1))/5 = 1.4",
+            "2da. Iteración: Con y1 = 1.25 y z1 = 1.4:",
+            "x2 = (8+1.25+1.4)/8 = 1.33125",
+            "y2 = (4+2(1.25)-1.4)/4 = 1.275",
+            "z2 = (5-1.25+3(1.25))/5 = 1.5",
+            "3era. Iteración: Con y2 = 1.275 y z2 = 1.5:",
+            "x3 = (8+1.275+1.5)/8 = 1.346875",
+            "y3 = (4+2(1.33125)-1.5)/4 = 1.290625",
+            "z3 = (5-1.33125+3(1.275))/5 = 1.49875",
+            "4ta. Iteración: Con y3 = 1.290625 y z3 = 1.49875:",
+            "x4 = (8+1.290625+1.49875)/8 = 1.348671875",
+            "y4 = (4+2(1.346875)-1.49875)/4 = 1.29875",
+            "z4 = (5-1.346875+3(1.290625))/5 = 1.505",
+            "5ta. Iteración: Con y4 = 1.29875 y z4 = 1.505:",
+            "x5 = (8+1.29875+1.505)/8 = 1.35046875",
+            "y5 = (4+2(1.348671875)-1.505)/4 = 1.298085938",
+            "z5 = (5-1.348671875+3(1.29875))/5 = 1.509515625",
+            "6ta. Iteración: Con y5 = 1.298085938 y z5 = 1.509515625:",
+            "x6 = (8+1.298085938+1.509515625)/8 = 1.350950195",
+            "y6 = (4+2(1.35046875)-1.509515625)/4 = 1.297855469",
+            "z6 = (5-1.35046875+3(1.298085938))/5 = 1.508757813",
+            "Errores absolutos en la 6ta. iteración:",
+            "Ex = |1.350950195 - 1.35046875| = 0.000481445 < 0.001",
+            "Ey = |1.297855469 - 1.298085938| = 0.000230468 < 0.001",
+            "Ez = |1.508757813 - 1.509515625| = 0.000757812 < 0.001",
+            "Como todos los errores son menores a 0.001, el método converge."
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula x1 en la primera iteración", "pista": "Usar valores en t=0.", "respuesta": "1.25"},
-            {"pregunta": "Calcula x2 en la segunda iteración", "pista": "Usar valores en t=1.", "respuesta": "1.33125"},
-            {"pregunta": "Escribe el texto exacto de conclusión", "pista": "Proceso iterativo...", "respuesta": "Proceso iterativo converge"}
+            {"pregunta": "Calcula x1 en la primera iteración", "pista": "Despeja x de la segunda ecuación utilizando los valores iniciales y0=1, z0=1.", "respuesta": "1.25"},
+            {"pregunta": "Calcula y1 en la primera iteración", "pista": "Despeja y de la tercera ecuación. Recuerda usar únicamente los valores de la iteración anterior, x0=1 y z0=1.", "respuesta": "1.25"},
+            {"pregunta": "Calcula z1 en la primera iteración", "pista": "Despeja z de la primera ecuación utilizando los valores iniciales, x0=1 y y0=1.", "respuesta": "1.4"},
+            {"pregunta": "¿A cuántas iteraciones se llegó a los margenes de error deseados?", "pista": "Revisa el desglose de las iteraciones en el procedimiento. ¿En qué iteración todos los errores absolutos (Ex, Ey, Ez) son menores a 0.001?", "respuesta": "6"},
+            {"pregunta": "Calcula el valor final de x (x6)", "pista": "Obtenido en la iteración 6 usando y5 = 1.298085938 y z5 = 1.509515625.", "respuesta": "1.350950195"},
+            {"pregunta": "Calcula el valor final de y (y6)", "pista": "Obtenido en la iteración 6 usando los valores de la iteración anterior, x5 = 1.35046875 y z5 = 1.509515625.", "respuesta": "1.297855469"},
+            {"pregunta": "Calcula el valor final de z (z6)", "pista": "Obtenido en la iteración 6 usando los valores de la iteración anterior, x5 = 1.35046875 y y5 = 1.298085938.", "respuesta": "1.508757813"},
+            {"pregunta": "Calcula el error absoluto final en x (Ex)", "pista": "Aplica Ex = |x6 - x5|, donde x5 = 1.35046875 y x6 = 1.350950195.", "respuesta": "0.000481445"},
+            {"pregunta": "Calcula el error absoluto final en y (Ey)", "pista": "Aplica Ey = |y6 - y5|, donde y5 = 1.298085938 y y6 = 1.297855469.", "respuesta": "0.000230468"},
+            {"pregunta": "Calcula el error absoluto final en z (Ez)", "pista": "Aplica Ez = |z6 - z5|, donde z5 = 1.509515625 y z6 = 1.508757813.", "respuesta": "0.000757812"}
         ],
-        "respuesta_final": "Proceso iterativo converge"
+        "respuesta_final": "x6 = 1.350950195, y6 = 1.297855469, z6 = 1.508757813"
     },
     {
         "id": 18,
         "metodo": "Mínimos Cuadrados (Línea Recta)",
         "problema": "Ajustar los datos a una línea recta g(x) = a0 + a1x",
-        "valores": "Σx=25.8, Σx²=169.88, Σy=28.4, Σxy=159.47",
+        "valores": "x:  1.1  |  1.9  |  2.4  |  4.8  |  5.1  |  10.5\ny:  2.5  |  2.7  |  3.7  |  5.2  |  6.0  |   8.3",
+        "formula": [
+            "  a₀       a₁ x      g(x)",
+            "┌                     ┐",
+            "│  n       Σx  │  Σy  │",
+            "│  Σx     Σx²  │ Σxy  │",
+            "└                     ┘"
+        ],
         "procedimiento": [
             "Ecuaciones Normales:",
             "1) 6 a0 + 25.8 a1 = 28.4",
             "2) 25.8 a0 + 169.88 a1 = 159.47",
-            "Multiplicar la ecuación 1 por 4.3:",
+            "Multiplicar la ec. 1 por -4.3 para eliminar a0:",
             "3) -25.8 a0 - 110.94 a1 = -122.12",
             "Sumar ecuaciones 2 y 3:",
             "0 a0 + 58.94 a1 = 37.35 => a1 = 37.35 / 58.94 = 0.633695283",
-            "Sustituir a1 en ec. 1:",
-            "6 a0 + 25.8(0.633695283) = 28.4 => 6 a0 = 12.05066169 => a0 = 2.008443615"
+            "Sustituir a1 en ec. 1 para hallar a0:",
+            "6 a0 + 25.8(0.633695283) = 28.4 => a0 = 2.008443615",
+            "Encontrar g(x) con los valores de a0 y a1:",
+            "g(x) = 2.008443615 + 0.633695283 x",
+            "g(1.1) = 2.705508427 | g(1.9) = 3.212464653 | g(2.4) = 3.529312295",
+            "g(4.8) = 5.050180975 | g(5.1) = 5.240289560 | g(10.5) = 8.662244090",
+            "Por último se gráfica en el mismo plano con las siguientes coordenadas:",
+            "1) [x, y]  y  2) [x, g(x)]",
+            "Para analizar el ajuste de la función original con respecto a la de Línea Recta."
         ],
         "pasos_juego": [
-            {"pregunta": "Resuelve la suma: 0 a0 + 58.94 a1 = ?", "pista": "Resta 159.47 - 122.12", "respuesta": "37.35"},
-            {"pregunta": "Calcula a1", "pista": "Despeja a1 de la suma.", "respuesta": "0.633695283"},
-            {"pregunta": "Ingresa la respuesta final", "pista": "Formato: a0 = X, a1 = Y", "respuesta": "a0 = 2.008443615, a1 = 0.633695283"}
+            {"pregunta": "Calcula la sumatoria de x (Σx)", "pista": "Suma todos los valores de x de la tabla: (1.1 + 1.9 + 2.4 + 4.8 + 5.1 + 10.5).", "respuesta": "25.8"},
+            {"pregunta": "Calcula la sumatoria de y (Σy)", "pista": "Suma todos los valores de y de la tabla: (2.5 + 2.7 + 3.7 + 5.2 + 6.0 + 8.3).", "respuesta": "28.4"},
+            {"pregunta": "Calcula la sumatoria de x² (Σx²)", "pista": "Eleva cada valor de x al cuadrado y súmalos: (1.1² + 1.9² + 2.4² + 4.8² + 5.1² + 10.5²).", "respuesta": "169.88"},
+            {"pregunta": "Calcula la sumatoria de xy (Σxy)", "pista": "Multiplica cada par x*y y suma los resultados: (1.1*2.5 + 1.9*2.7 + 2.4*3.7 + 4.8*5.2 + 5.1*6.0 + 10.5*8.3).", "respuesta": "159.47"},
+            {"pregunta": "Calcula el valor de a1 (pendiente)", "pista": "Resuelve el sistema. Multiplicando Ec 1 por -4.3, sumas ambas y despejas a1: a1 = 37.35 / 58.94.", "respuesta": "0.633695283"},
+            {"pregunta": "Calcula el valor de a0 (intersección)", "pista": "Sustituye a1 en la Ecuación 1: a0 = (28.4 - 25.8 * a1) / 6.", "respuesta": "2.008443615"},
+            {"pregunta": "Calcula el valor ajustado g(10.5)", "pista": "Aplica g(x) = a0 + a1 * x con x = 10.5.", "respuesta": "8.662244090"}
         ],
-        "respuesta_final": "a0 = 2.008443615, a1 = 0.633695283"
+        "respuesta_final": "8.662244090"
     },
     {
         "id": 19,
         "metodo": "Regla Trapezoidal",
         "problema": "Integral de 2 a 3 de (1 / (1+x²)) dx con n = 4",
         "valores": "a = 2, b = 3, n = 4",
+        "formula": [
+            "      b - a",
+            "  h = ─────",
+            "        n"
+        ],
         "procedimiento": [
-            "h = (b-a)/n = (3-2)/4 = 1/4",
-            "I = (1/4 / 2) * { f(x=2) + 2{f(x=9/4) + f(x=5/2) + f(x=11/4)} + f(x=3) }",
-            "I = (1/4 / 2) * { 1/(1+(2)²) + 2( 1/(1+(9/4)²) + 1/(1+(5/2)²) + 1/(1+(11/4)²) ) + 1/(1+(3)²) }",
-            "I = (1/4 / 2) * (0.2 + (32/97) + (8/29) + (32/137) + 0.1)",
-            "I = 1/8 (1.139335619)",
+            "h = (b-a)/n = (3-2)/4 = 1/4 = 0.25",
+            "I = (0.25 / 2) * { f(2) + 2[f(9/4) + f(5/2) + f(11/4)] + f(3) }",
+            "I = 0.125 * { 1/(1+2²) + 2[1/(1+(9/4)²) + 1/(1+(5/2)²) + 1/(1+(11/4)²)] + 1/(1+3²) }",
+            "I = 0.125 * (0.2 + 2[0.164948453 + 0.137931034 + 0.116788321] + 0.1)",
+            "I = 0.125 * (1.139335619)",
             "I = 0.142416952"
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula el valor de h", "pista": "h = (b-a)/n", "respuesta": "0.25"},
-            {"pregunta": "Calcula la sumatoria interna", "pista": "La suma total de corchetes, multiplicado por h/2.", "respuesta": "1.139335619"},
-            {"pregunta": "Calcula el resultado I final", "pista": "Aplica la Regla Trapezoidal.", "respuesta": "0.142416952"}
+            {"pregunta": "Calcula el valor de h", "pista": "Toma en cuenta los valores iniciales en la fórmula de h.", "respuesta": "0.25"},
+            {"pregunta": "Calcula la sumatoria interna de los corchetes", "pista": "Evalúa f(x) en los puntos de la partición y aplica los coeficientes correspondientes del trapecio compuesto.", "respuesta": "1.139335619"},
+            {"pregunta": "Calcula el resultado I final", "pista": "Multiplica la sumatoria obtenida por el factor h/2.", "respuesta": "0.142416952"}
         ],
         "respuesta_final": "0.142416952"
     },
@@ -446,6 +546,11 @@ banco = [
         "metodo": "Newton - Cotes (Abiertas)",
         "problema": "Integral de -2 a 2 de (3x³ - 10) dx con n = 4",
         "valores": "a = -2, b = 2, n = 4",
+        "formula": [
+            "          n+2                   b - a",
+            "  I = α h  Σ  wᵢ f(a + ih)  ; h = ─────",
+            "         i=0                    n + 2"
+        ],
         "procedimiento": [
             "h = (b-a)/(n+2) = (2 - (-2))/(4+2) = 2/3",
             "α = 6/20",
@@ -455,76 +560,71 @@ banco = [
             "I = -40"
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula el sumando principal interior", "pista": "Es un número entero negativo.", "respuesta": "-200"},
-            {"pregunta": "Calcula el factor multiplicador \u03b1*h", "pista": "Es una fracción simple [6/20][2/3]. En decimal o fracción.", "respuesta": "0.2"},
-            {"pregunta": "Calcula I", "pista": "Multiplica ambos factores.", "respuesta": "-40"}
+            {"pregunta": "Calcula el valor de h", "pista": "Toma en cuenta los valores iniciales en la fórmula de h.", "respuesta": "2/3"},
+            {"pregunta": "Calcula el valor de alfa (α)", "pista": "Revisa el valor de α definido al inicio de la sección de procedimiento.", "respuesta": "6/20"},
+            {"pregunta": "Calcula el valor de la integral I", "pista": "Multiplica el factor global α * h por el resultado de la sumatoria interna del procedimiento.", "respuesta": "-40"}
         ],
         "respuesta_final": "-40"
     },
     {
         "id": 21,
         "metodo": "Regla de 1/3 Simpson",
-        "problema": "Integral de 2 a 3 de (1 / (1+x²)) dx con n = 10",
+        "problema": "  3\n  ∫ (1 / (1+x²)) dx\n  2\ncon n = 10",
         "valores": "a = 2, b = 3, n = 10",
+        "formula": [
+            "        h   ┌             n-1          n-2          ┐",
+            "  I = ─── │ f(a) + 4  Σ  f(xᵢ) + 2  Σ  f(xⱼ) + f(b) │",
+            "        3   └            i=1,impar    j=2,par       ┘",
+            "  donde h = (b - a) / n (n es siempre par)"
+        ],
         "procedimiento": [
-            "h = (b-a)/n = (3-2)/10 = 1/10",
-            "I = (1/10 / 3) * { f(x=2) + 4f(x=21/10) + 2f(x=11/5) + 4f(x=23/10) + 2f(x=12/5) + 4f(x=5/2) + 2f(x=13/5) + 4f(x=27/10) + 2f(x=14/5) + 4f(x=29/10) + f(x=3) }",
-            "I = 1/30 * (0.2 + 400/541 + 25/73 + 400/629 + 50 + 169 + 16/29 + 25/97 + 400/829 + 50/221 + 400/941 + 0.1)",
+            "h = (b-a)/n = (3-2)/10 = 1/10 = 0.1",
+            "I = (0.1 / 3) * { f(2) + 4[f(2.1)+f(2.3)+f(2.5)+f(2.7)+f(2.9)] + 2[f(2.2)+f(2.4)+f(2.6)+f(2.8)] + f(3) }",
+            "I = 1/30 * (0.2 + 400/541 + 25/73 + 400/629 + 50/169 + 16/29 + 25/97 + 400/829 + 50/221 + 400/941 + 0.1)",
             "I = 1/30 * (4.256914514)",
             "I = 0.14189715"
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula h", "pista": "h = (b-a)/n", "respuesta": "0.1"},
-            {"pregunta": "Calcula la suma interna (corchetes)", "pista": "Suma total dentro de los corchetes.", "respuesta": "4.256914514"},
-            {"pregunta": "Calcula I final", "pista": "Multiplica la suma por h/3.", "respuesta": "0.14189715"}
+            {"pregunta": "Calcula el valor de h", "pista": "Toma en cuenta los valores iniciales en la sustitución de la fórmula.", "respuesta": "0.1"},
+            {"pregunta": "Calcula la sumatoria interna de los corchetes", "pista": "Evalúa f(x) en los puntos de la partición aplicando los coeficientes correspondientes de Simpson 1/3.", "respuesta": "4.256914514"},
+            {"pregunta": "Calcula el resultado I final", "pista": "Multiplica la sumatoria obtenida por el factor h/3.", "respuesta": "0.14189715"}
         ],
         "respuesta_final": "0.14189715"
     },
     {
         "id": 22,
         "metodo": "Regla de 3/8 Simpson",
-        "problema": "Integral de 0 a 1 de x³e^x dx con n = 3",
+        "problema": "  1\n  ∫ x³e^x dx\n  0\ncon n = 3",
         "valores": "a = 0, b = 1, n = 3",
+        "formula": [
+            "        3 h ┌             n-1          ┐   b - a",
+            "  I = ─── │ f(a) + 3  Σ  f(xᵢ) + f(b) │ ; ─────",
+            "         8  └            i=1           ┘     n"
+        ],
         "procedimiento": [
             "h = (b-a)/n = (1-0)/3 = 1/3",
-            "I = (3/8)[1/3] * { f(x=0) + 3(f(x=1/3) + f(x=2/3)) + f(x=1) }",
-            "I = [3/8][1/3] * { [(0)³e^0] + 3[ (1/3)³e^(1/3) + (2/3)³e^(2/3) ] + [(1)³e^1] }",
+            "I = (3/8)[1/3] * { f(0) + 3[f(1/3) + f(2/3)] + f(1) }",
+            "I = [1/8] * { [(0)³e^0] + 3[(1/3)³e^(1/3) + (2/3)³e^(2/3)] + [(1)³e^1] }",
             "I = [1/8] * (0 + 0.155068047 + 1.731319148 + 2.718281828)",
             "I = [1/8] * [4.604669023]",
             "I = 0.575583627"
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula el coeficiente multiplicador (3h/8)", "pista": "Sustituye h en (3/8)*h.", "respuesta": "0.125"},
-            {"pregunta": "Calcula la suma interna", "pista": "Suma dentro de los corchetes.", "respuesta": "4.604669023"},
-            {"pregunta": "Calcula I final", "pista": "Aplica la regla de 3/8 de Simpson.", "respuesta": "0.575583627"}
+            {"pregunta": "Calcula el coeficiente multiplicador (3h/8)", "pista": "Toma en cuenta los valores iniciales al sustituir en la fórmula de h", "respuesta": "0.125"},
+            {"pregunta": "Calcula la sumatoria interna de los corchetes", "pista": "Resuelve las operaciones matematicas dentro de los corchetes", "respuesta": "4.604669023"},
+            {"pregunta": "Calcula el resultado I final", "pista": "Multiplica el coeficiente multiplicador por la sumatoria total de los corchetes", "respuesta": "0.575583627"}
         ],
         "respuesta_final": "0.575583627"
     },
     {
         "id": 23,
-        "metodo": "Euler hacia Adelante",
-        "problema": "3y' - 5yt + 1 = 0",
-        "valores": "y0 = 2, h = 0.2, t0 = 0",
-        "procedimiento": [
-            "y' = (5yt - 1) / 3",
-            "y1 = y0 + h{(5y0t0 - 1)/3} = 2 + (0.2){(5(2)(0) - 1)/3}",
-            "y1 = 1.933333333",
-            "t1 = t0 + h = 0 + 0.2 = 0.2",
-            "y2 = y1 + h{(5y1t1 - 1)/3} = 1.933333333 + (0.2){(5(1.933333333)(0.2) - 1)/3}",
-            "y2 = 1.995555556"
-        ],
-        "pasos_juego": [
-            {"pregunta": "Calcula y1", "pista": "Aplica la fórmula de Euler para la primera iteración.", "respuesta": "1.933333333"},
-            {"pregunta": "Calcula t1", "pista": "t1 = t0 + h", "respuesta": "0.2"},
-            {"pregunta": "Calcula y2 final", "pista": "Aplica la fórmula de Euler con y1, t1.", "respuesta": "1.995555556"}
-        ],
-        "respuesta_final": "1.995555556"
-    },
-    {
-        "id": 24,
         "metodo": "Euler Modificado",
         "problema": "2y' + 3yt + y = 0",
         "valores": "y0 = 1.2, h = 0.3, y1 = 1.2, t0 = 0, t1 = 0.3",
+        "formula": [
+            "y' = f(t, y)",
+            "yn+1 = yn + h/2 * [f(tn, yn) + f(tn+1, yn+1)]"
+        ],
         "procedimiento": [
             "Despejar y': y' = (-3yt - y) / 2",
             "y'1 = y0 + (h/2){ [(-3y0t0 - y0)/2] + [(-3y1t1 - y1)/2] }",
@@ -533,17 +633,22 @@ banco = [
             "y'1 = 0.939"
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula el primer término de f(t,y)", "pista": "(-3y0t0 - y0)/2", "respuesta": "-0.6"},
-            {"pregunta": "Calcula el segundo término de f(t,y)", "pista": "(-3y1t1 - y1)/2", "respuesta": "-1.14"},
-            {"pregunta": "Calcula y'1", "pista": "Aplica Euler modificado.", "respuesta": "0.939"}
+            {"pregunta": "Calcula f(y0, t0)", "pista": "Usa la fórmula: f(t, y) = (-3yt - y) / 2,", "respuesta": "-0.6"},
+            {"pregunta": "Calcula f(y1, t1)", "pista": "Usa la fórmula: f(t, y) = (-3yt - y) / 2,", "respuesta": "-1.14"},
+            {"pregunta": "Calcula y'1 final", "pista": "Usa la fórmula completa: y'1 = y0 + (h / 2) * [f(y0, t0) + f(y1, t1)],", "respuesta": "0.939"}
         ],
         "respuesta_final": "0.939"
     },
     {
-        "id": 25,
+        "id": 24,
         "metodo": "Runge - Kutta de 2do orden",
         "problema": "y' - 2ty + 1 = 0",
         "valores": "y0 = 1, h = 0.6, t0 = 0",
+        "formula": [
+            "k1 = h * f(yn, tn)",
+            "k2 = h * f(yn + k1, tn + h)",
+            "yn+1 = yn + 1/2 * (k1 + k2)"
+        ],
         "procedimiento": [
             "Despejar: y' = 2ty - 1",
             "k1 = 0.6( 2(0)(1) - 1 ) = -0.6",
@@ -553,17 +658,23 @@ banco = [
             "y1 = 0.651632664"
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula k1", "pista": "Sustituye en la ecuación de k1.", "respuesta": "-0.6"},
-            {"pregunta": "Calcula k2", "pista": "Sustituye en la ecuación de k2.", "respuesta": "0.303265329"},
-            {"pregunta": "Calcula y1 final", "pista": "Aplica Runge-Kutta 2do Orden.", "respuesta": "0.651632664"}
+            {"pregunta": "Calcula k1", "pista": "Usa la fórmula: k1 = h * f(yn, tn), donde f(t, y) = 2ty - 1", "respuesta": "-0.6"},
+            {"pregunta": "Calcula k2", "pista": "Usa la fórmula: k2 = h * f(yn + k1, tn + h), donde f(t, y) = 2ty - 1", "respuesta": "0.303265329"},
+            {"pregunta": "Calcula y1 final", "pista": "Usa la fórmula: yn+1 = yn + 1/2 * (k1 + k2)", "respuesta": "0.651632664"}
         ],
         "respuesta_final": "0.651632664"
     },
     {
-        "id": 26,
+        "id": 25,
         "metodo": "Runge - Kutta de 3er Orden",
         "problema": "y' = (2yt + 1) / y²",
         "valores": "y0 = 1, h = 0.25, t0 = 0",
+        "formula": [
+            "k1 = h * f(yn, tn)",
+            "k2 = h * f(yn + k1/2, tn + h/2)",
+            "k3 = h * f(yn - k1 + 2*k2, tn + h)",
+            "yn+1 = yn + 1/6 * (k1 + 4*k2 + k3)"
+        ],
         "procedimiento": [
             "k1 = 0.25( (2(1)(0) + 1) / (1)² ) = 0.25",
             "k2 = 0.25{ (2(1 + 0.25/2)(0 + 0.25/2) + 1) / (1 + 0.25/2)² } = 0.253086419",
@@ -572,18 +683,25 @@ banco = [
             "y1 = 1.211723276"
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula k1", "pista": "Sustituye en la fórmula de k1.", "respuesta": "0.25"},
-            {"pregunta": "Calcula k2", "pista": "Sustituye en la fórmula de k2.", "respuesta": "0.253086419"},
-            {"pregunta": "Calcula k3", "pista": "Sustituye en la fórmula de k3.", "respuesta": "0.257939981"},
-            {"pregunta": "Calcula y1 final", "pista": "Aplica Runge-Kutta 3er Orden.", "respuesta": "1.211723276"}
+            {"pregunta": "Calcula k1", "pista": "Sustituye y0 = 1, t0 = 0 y h = 0.25 en k1 = h * f(yn, tn), donde f(0, 1) = 1.", "respuesta": "0.25"},
+            {"pregunta": "Calcula k2", "pista": "Evalúa f en el punto medio: t = 0.125 e y = 1.125. f(0.125, 1.125) ≈ 1.012346. Multiplica por h.", "respuesta": "0.253086419"},
+            {"pregunta": "Calcula k3", "pista": "Evalúa f en t = 0.25 e y ≈ 1.256173 (que es y0 - k1 + 2*k2). Multiplica el resultado por h = 0.25.", "respuesta": "0.257939981"},
+            {"pregunta": "Calcula y1 final", "pista": "Sustituye en la fórmula final. Nota: Por un error de cálculo común en este procedimiento, la suma de corchetes dio 1.270339656, resultando en 1.211723276.", "respuesta": "1.211723276"}
         ],
         "respuesta_final": "1.211723276"
     },
     {
-        "id": 27,
+        "id": 26,
         "metodo": "Runge - Kutta de 4to. Orden por 1/3 de Simpson",
         "problema": "y' = (y + t)² / (1 - y)",
         "valores": "y0 = 0.4, h = 0.2, t0 = 0",
+        "formula": [
+            "k1 = h * f(yn, tn)",
+            "k2 = h * f(yn + k1/2, tn + h/2)",
+            "k3 = h * f(yn + k2/2, tn + h/2)",
+            "k4 = h * f(yn + k3, tn + h)",
+            "yn+1 = yn + 1/6 * (k1 + 2*k2 + 2*k3 + k4)"
+        ],
         "procedimiento": [
             "k1 = (0.2){ [0.4 + 0]² / (1 - 0.4) } = (0.2){ (0.4)² / 0.6 } = 0.053333333",
             "k2 = (0.2)[ [0.4 + (0.053333333/2) + (0 + (0.2/2))]² / (1 - [0.4 + (0.053333333/2)]) ] = 0.096759689",
@@ -593,19 +711,26 @@ banco = [
             "y1 = 0.511617621"
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula k1", "pista": "Evalúa la función con valores iniciales.", "respuesta": "0.053333333"},
-            {"pregunta": "Calcula k2", "pista": "Aplica la fórmula de k2.", "respuesta": "0.096759689"},
-            {"pregunta": "Calcula k3", "pista": "Aplica la fórmula de k3 con k2.", "respuesta": "0.109031713"},
-            {"pregunta": "Calcula k4", "pista": "Aplica la fórmula de k4.", "respuesta": "0.2047895890"},
-            {"pregunta": "Calcula y1 final", "pista": "Aplica Simpson 1/3.", "respuesta": "0.511617621"}
+            {"pregunta": "Calcula k1", "pista": "Sustituye y0 = 0.4, t0 = 0 y h = 0.2 en la fórmula.", "respuesta": "0.053333333"},
+            {"pregunta": "Calcula k2", "pista": "Evalúa f en el punto medio: t = 0.1 e y ≈ 0.426667. Multiplica por h.", "respuesta": "0.096759689"},
+            {"pregunta": "Calcula k3", "pista": "Evalúa f en el punto medio: t = 0.1 e y ≈ 0.448380. Multiplica por h.", "respuesta": "0.109031713"},
+            {"pregunta": "Calcula k4", "pista": "Evalúa f al final del intervalo: t = 0.2 e y ≈ 0.509032. Multiplica por h.", "respuesta": "0.2047895890"},
+            {"pregunta": "Calcula y1 final", "pista": "Sustituye en la fórmula final usando los coeficientes de Simpson 1/3.", "respuesta": "0.511617621"}
         ],
         "respuesta_final": "0.511617621"
     },
     {
-        "id": 28,
+        "id": 27,
         "metodo": "Runge - Kutta de 4to. Orden por 3/8 de Simpson",
         "problema": "y' = -y / (y² + t)",
         "valores": "y0 = 1, h = 0.5, t0 = 0",
+        "formula": [
+            "k1 = h * f(yn, tn)",
+            "k2 = h * f(yn + k1/3, tn + h/3)",
+            "k3 = h * f(yn + k1/3 + k2/3, tn + 2*h/3)",
+            "k4 = h * f(yn + k1 - k2 - k3, tn + h)",
+            "yn+1 = yn + 1/8 * (k1 + 3*k2 + 3*k3 + k4)"
+        ],
         "procedimiento": [
             "k1 = 0.5{ -1 / ((1)² + 0) } = -0.5",
             "k2 = 0.5{ (-1 + (-0.5/3)) / ([1 + (-0.5/3)]² + [0 + (0.5/3)]) } = -0.483870959",
@@ -615,19 +740,27 @@ banco = [
             "y1 = 1 + (-0.447420003) = 0.552579997"
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula k1", "pista": "Calcula el primer incremento.", "respuesta": "-0.5"},
-            {"pregunta": "Calcula k2", "pista": "Calcula el segundo incremento.", "respuesta": "-0.483870959"},
-            {"pregunta": "Calcula k3", "pista": "Calcula el tercer incremento.", "respuesta": "-0.428066426"},
-            {"pregunta": "Calcula k4", "pista": "Calcula el último incremento de Runge Kutta.", "respuesta": "-0.343547869"},
-            {"pregunta": "Calcula y1 final", "pista": "Aplica Simpson 3/8.", "respuesta": "0.552579997"}
+            {"pregunta": "Calcula k1", "pista": "Sustituye y0 = 1, t0 = 0 y h = 0.5 en la fórmula.", "respuesta": "-0.5"},
+            {"pregunta": "Calcula k2", "pista": "Evalúa f en t = 0.166667 e y = 0.833333. Multiplica por h.", "respuesta": "-0.483870959"},
+            {"pregunta": "Calcula k3", "pista": "Evalúa f en t ≈ 0.333333 e y ≈ 0.672043. Multiplica por h = 0.5.", "respuesta": "-0.428066426"},
+            {"pregunta": "Calcula k4", "pista": "Evalúa f al final del intervalo: t = 0.5 e y ≈ 1.411937. Multiplica por h.", "respuesta": "-0.343547869"},
+            {"pregunta": "Calcula y1 final", "pista": "Sustituye en la fórmula final usando los coeficientes de Simpson 3/8.", "respuesta": "0.552579997"}
         ],
         "respuesta_final": "0.552579997"
     },
     {
-        "id": 29,
+        "id": 28,
         "metodo": "Runge - Kutta de Orden Superior",
         "problema": "2y'' - 4y't - 2y = 0",
         "valores": "y0 = 1.1, h = 0.2, y'0 = 1.2, t0 = 0",
+        "formula": [
+            "k1 = h * Vn",
+            "m1 = h * [a * Vn * qn - b * Un]",
+            "k2 = h * (Vn + m1)",
+            "m2 = h * [a * (Vn + m1) * (qn + h) - b * (Un + k1)]",
+            "y1 = Un + 1/2 * (k1 + k2)",
+            "y'1 = Vn + 1/2 * (m1 + m2)"
+        ],
         "procedimiento": [
             "y'' = 2y't - y",
             "a = 2, b = 1, Vn = y'0 = 1.2, Un = y0 = 1.1, qn = t = 0",
@@ -639,12 +772,12 @@ banco = [
             "y'1 = 1.2 + 1/2[(-0.22) + (-0.1896)] = 0.9952"
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula k1", "pista": "h * Vn", "respuesta": "0.24"},
-            {"pregunta": "Calcula m1", "pista": "Calcula la función con valores iniciales.", "respuesta": "-0.22"},
-            {"pregunta": "Calcula k2", "pista": "Calcula el segundo incremento k2.", "respuesta": "0.196"},
-            {"pregunta": "Calcula m2", "pista": "Calcula el segundo incremento m2.", "respuesta": "-0.1892"},
-            {"pregunta": "Calcula y1", "pista": "Aplica la fórmula para y1.", "respuesta": "1.318"},
-            {"pregunta": "Calcula y'1", "pista": "Aplica la fórmula para y'1.", "respuesta": "0.9952"}
+            {"pregunta": "Calcula k1", "pista": "Sustituye h = 0.2 y Vn = 1.2 en la fórmula.", "respuesta": "0.24"},
+            {"pregunta": "Calcula m1", "pista": "Sustituye a = 2, b = 1, qn = 0 y Un = 1.1 en la fórmula.", "respuesta": "-0.22"},
+            {"pregunta": "Calcula k2", "pista": "Sustituye h = 0.2, Vn = 1.2 y m1 = -0.22 en la fórmula.", "respuesta": "0.196"},
+            {"pregunta": "Calcula m2", "pista": "Sustituye a = 2, b = 1, qn = 0, h = 0.2 y Un = 1.1 en la fórmula.", "respuesta": "-0.1892"},
+            {"pregunta": "Calcula y1", "pista": "Sustituye en la fórmula usando Un = 1.1.", "respuesta": "1.318"},
+            {"pregunta": "Calcula y'1", "pista": "Sustituye en la fórmula usando Vn = 1.2.", "respuesta": "0.9952"}
         ],
         "respuesta_final": "y1 = 1.318, y'1 = 0.9952"
     }
