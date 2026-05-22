@@ -3,10 +3,10 @@ import os
 import pygame
 import sys
 import random
-from Caso1 import Caso1
-from Caso2 import Caso2
-from Caso3 import Caso3
-
+from casos import Caso1
+from casos import Caso2
+from casos import Caso3
+        
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 pygame.init()
@@ -16,7 +16,7 @@ ANCHO = 1000
 ALTO = 700
 
 pantalla = pygame.display.set_mode((ANCHO, ALTO))
-pygame.display.set_caption("Detective: Casos Numericos")
+pygame.display.set_caption("Detective: Casos Numéricos")
 
 reloj = pygame.time.Clock()
 
@@ -115,7 +115,7 @@ while True:
         )
 
         dibujar_texto(
-            "CASOS NUMERICOS",
+            "CASOS NUMÉRICOS",
             titulo_fuente,
             AZUL,
             "centro",
@@ -123,7 +123,7 @@ while True:
         )
 
         dibujar_texto(
-            '"Los numeros nunca mienten..."',
+            '"Los números nunca mienten..."',
             frase_fuente,
             BLANCO,
             "centro",
@@ -187,7 +187,7 @@ while True:
         color_txt2 = BLANCO if estado_progreso["casos_desbloqueados"] >= 2 else (150, 150, 150)
         dibujar_texto(txt_c2, menu_fuente, color_txt2, "centro", 320)
         
-        txt_c3 = "Caso 03 - La Confrontaci\u00f3n" if estado_progreso["casos_desbloqueados"] >= 3 else "Caso 03 (Bloqueado)"
+        txt_c3 = "Caso 03 - La Confrontación" if estado_progreso["casos_desbloqueados"] >= 3 else "Caso 03 (Bloqueado)"
         color_txt3 = BLANCO if estado_progreso["casos_desbloqueados"] >= 3 else (150, 150, 150)
         dibujar_texto(txt_c3, menu_fuente, color_txt3, "centro", 400)
         
@@ -206,9 +206,9 @@ while True:
         pygame.draw.rect(pantalla, color_dificil, btn_dificil, border_radius=12)
         pygame.draw.rect(pantalla, color_volver, btn_volver, border_radius=12)
         
-        dibujar_texto("F\u00e1cil", menu_fuente, BLANCO, "centro", 260)
+        dibujar_texto("Fácil", menu_fuente, BLANCO, "centro", 260)
         dibujar_texto("Intermedio", menu_fuente, BLANCO, "centro", 340)
-        dibujar_texto("Dif\u00edcil", menu_fuente, BLANCO, "centro", 420)
+        dibujar_texto("Difícil", menu_fuente, BLANCO, "centro", 420)
         dibujar_texto("Volver", menu_fuente, BLANCO, "centro", 570)
 
     elif estado_menu == "marcador":
@@ -222,7 +222,7 @@ while True:
         txt_c2 = f"Caso 02 - Descubriendo la Verdad: {estado_progreso['puntajes_casos'][2]} pts" if estado_progreso["casos_desbloqueados"] >= 2 else "Caso 02: ---"
         dibujar_texto(txt_c2, menu_fuente, BLANCO if estado_progreso["casos_desbloqueados"] >= 2 else GRIS, "centro", 340)
         
-        txt_c3 = f"Caso 03 - La Confrontaci\u00f3n: {estado_progreso['puntajes_casos'][3]} pts" if estado_progreso["casos_desbloqueados"] >= 3 else "Caso 03: ---"
+        txt_c3 = f"Caso 03 - La Confrontación: {estado_progreso['puntajes_casos'][3]} pts" if estado_progreso["casos_desbloqueados"] >= 3 else "Caso 03: ---"
         dibujar_texto(txt_c3, menu_fuente, BLANCO if estado_progreso["casos_desbloqueados"] >= 3 else GRIS, "centro", 420)
         
         color_volver = AZUL if btn_volver.collidepoint(mouse) else GRIS

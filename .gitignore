@@ -1,0 +1,36 @@
+# Cache de Python
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+.pytest_cache/
+
+# Archivos de PyInstaller (Compilación)
+build/
+dist/
+*.spec
+
+# Entornos virtuales
+venv/
+env/
+.env
+.venv/
+ENV/
+
+# IDEs y Editores de código
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# Sistema Operativo
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+# Archivos de log
+*.log
