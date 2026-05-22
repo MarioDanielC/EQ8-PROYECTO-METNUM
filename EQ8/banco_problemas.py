@@ -15,14 +15,14 @@ banco = [
             "f(x) = Ln 4 = 1.386294361",
             "g(x) = ((1.609437912 - 0.69314718) / (5 - 2)) * (4 - 2) + 0.69314718",
             "g(x) = 1.304007668",
-            "E = |1.386294361 - 1.304007668|",
-            "E = 0.082286693"
+            "ε = |1.386294361 - 1.304007668|",
+            "ε = 0.082286693"
         ],
         "pasos_juego": [
             {"pregunta": "Calcula el valor de f(a)", "pista": "Sustituye 'a' en la función Ln.", "respuesta": "0.69314718"},
             {"pregunta": "Calcula el valor de f(b)", "pista": "Sustituye 'b' en la función Ln.", "respuesta": "1.609437912"},
             {"pregunta": "Calcula el valor final de g(x)", "pista": "Usa la fórmula: ((f(b) - f(a)) / (b - a)) * (x - a) + f(a)", "respuesta": "1.304007668"},
-            {"pregunta": "Calcula el Error absoluto E", "pista": "E = |f(x) - g(x)|", "respuesta": "0.082286693"}
+            {"pregunta": "Calcula el Error absoluto ε", "pista": "ε = |f(x) - g(x)|", "respuesta": "0.082286693"}
         ],
         "respuesta_final": "1.304007668"
     },
@@ -40,14 +40,14 @@ banco = [
             "f(x) = Ln 4 = 1.386294361",
             "g(x) = ((1.609437912 - 1.098612289) / (5 - 3)) * (4 - 3) + 1.098612289",
             "g(x) = 1.354025101",
-            "E = |1.386294361 - 1.354025101|",
-            "E = 0.03226926"
+            "ε = |1.386294361 - 1.354025101|",
+            "ε = 0.03226926"
         ],
         "pasos_juego": [
             {"pregunta": "Calcula el valor de f(a)", "pista": "Sustituye 'a' en la función Ln.", "respuesta": "1.098612289"},
             {"pregunta": "Calcula el valor de f(b)", "pista": "Sustituye 'b' en la función Ln.", "respuesta": "1.609437912"},
             {"pregunta": "Calcula el valor final de g(x)", "pista": "Usa la fórmula: ((f(b) - f(a)) / (b - a)) * (x - a) + f(a)", "respuesta": "1.354025101"},
-            {"pregunta": "Calcula el Error absoluto E", "pista": "E = |f(x) - g(x)|", "respuesta": "0.03226926"}
+            {"pregunta": "Calcula el Error absoluto ε", "pista": "ε = |f(x) - g(x)|", "respuesta": "0.03226926"}
         ],
         "respuesta_final": "1.354025101"
     },
@@ -106,9 +106,18 @@ banco = [
         "valores": "Xi: 4.4, 3.7, 3.1 | yi: -0.68, -1.59, -1.82",
         "formula": [
             "g(x) = D⁰ + D1¹(x - x1) + D1²(x - x1)(x - x2)",
-            "D1¹ = (y2 - y1) / (x2 - x1)",
-            "D2¹ = (y3 - y2) / (x3 - x2)",
-            "D1² = (D2¹ - D1¹) / (x3 - x1)"
+            "",
+            "        y2 - y1",
+            "D1¹ = ───────────",
+            "        x2 - x1",
+            "",
+            "        y3 - y2",
+            "D2¹ = ───────────",
+            "        x3 - x2",
+            "",
+            "       D2¹ - D1¹",
+            "D1² = ───────────",
+            "        x3 - x1"
         ],
         "procedimiento": [
             "h1 = |x2 - x1| = |3.7 - 4.4| = 0.7",
@@ -186,14 +195,15 @@ banco = [
             "a=0.25, b=0.375, X=0.3125 (comportamiento -)",
             "a=0.25, b=0.3175, X=0.28375 (comportamiento +)",
             "a=0.3, b=0.3175, X=0.3087 (comportamiento +)",
-            "E = |xi+1 - xi| = 0.001"
+            "ε = |xi+1 - xi| = 0.001"
         ],
         "pasos_juego": [
             {"pregunta": "Calcula X en la primera iteración (a=0, b=1)", "pista": "Sustituye los valores en la fórmula de x", "respuesta": "0.5"},
             {"pregunta": "Calcula X en la iteración 2", "pista": "Nuevo intervalo a=0, b=0.5", "respuesta": "0.25"},
             {"pregunta": "Calcula X en la iteración 3", "pista": "Nuevo intervalo a=0.25, b=0.5", "respuesta": "0.375"},
             {"pregunta": "Calcula X en la iteración 4", "pista": "Nuevo intervalo a=0.25, b=0.375", "respuesta": "0.3125"},
-            {"pregunta": "Calcula la X final", "pista": "La que cumple E=0.001", "respuesta": "0.3087"}
+            {"pregunta": "Calcula X en la iteración 5", "pista": "Nuevo intervalo a=0.25, b=0.3175", "respuesta": "0.28375"},
+            {"pregunta": "Calcula la X final", "pista": "La que cumple ε=0.001", "respuesta": "0.3087"}
         ],
         "respuesta_final": "0.3087" 
     },
@@ -206,19 +216,20 @@ banco = [
             "Empezar con un valor inicial X0 = 0",
             "Despejar 'x': x = (e^x - 2) / 2",
             "i=0, Xi=0",
-            "i=1, (e^0 - 2)/2 = -0.5, E = |-0.5 - 0| = 0.5",
-            "i=2, (e^-0.5 - 2)/2 = -0.69673467, E = 0.19673467",
+            "i=1, (e^0 - 2)/2 = -0.5, ε = |-0.5 - 0| = 0.5",
+            "i=2, (e^-0.5 - 2)/2 = -0.69673467, ε = 0.19673467",
             "... (Iteraciones continúan de la misma forma hasta i=9)",
-            "i=9, (e^-0.768027404 - 2)/2 = -0.768036346, E = 0.000008941",
-            "El margen de error se encuentra en: E = |x9 - x8|",
-            "E = |-0.768036346 - (-0.768036346)| = 0.000008941"
+            "i=9, (e^-0.768027404 - 2)/2 = -0.768036346, ε = 0.000008941",
+            "El margen de error se encuentra en: ε = |x9 - x8|",
+            "ε = |-0.768036346 - (-0.768036346)| = 0.000008941"
         ],
         "pasos_juego": [
             {"pregunta": "Calcula X1", "pista": "Sustituye X0 en la ecuación despejada.", "respuesta": "-0.5"},
             {"pregunta": "Calcula X2", "pista": "Sustituye X1 en la ecuación despejada.", "respuesta": "-0.69673467"},
-            {"pregunta": "Calcula la X final convergente", "pista": "Calcula hasta i=9", "respuesta": "-0.768036346"}
+            {"pregunta": "Calcula la X final convergente", "pista": "Calcula hasta i=9", "respuesta": "-0.768036346"},
+            {"pregunta": "Calcula el error correspondiente a la última iteración", "pista": "Calcula ε = |x9 - x8| con los últimos valores del procedimiento.", "respuesta": "0.000008941"}
         ],
-        "respuesta_final": "-0.768036346"
+        "respuesta_final": "0.000008941"
     },
     {
         "id": 10,
@@ -226,20 +237,22 @@ banco = [
         "problema": "Encuentre la raíz real de la ecuación f(x) = 0.8x² + x - 3",
         "valores": "i=0, xo = 1",
         "formula": [
-            "xi+1 = xi - ( f(xi) / f'(xi) )",
-            "E = |xi+1 - xi|"
+            "             f(xi)",
+            "xi+1 = xi - ───────",
+            "            f'(xi)",
+            "ε = |xi+1 - xi|"
         ],
         "procedimiento": [
             "f'(x) = 1.6x + 1",
             "i=0, xo = 1",
-            "i=1, x1 = 1 - ( (0.8(1)² + (1) - 3) / (1.6(1) + 1) ) = 1.461538462 | E = |1.461538462 - 1| = 0.461538462",
-            "i=2, x2 = 1.461538462 - ( (0.8(1.461538462)² + (1.461538462) - 3) / (1.6(1.461538462) + 1) ) = 1.410492733 | E = |1.410492733 - 1.461538462| = 0.051045728",
-            "i=3, x3 = 1.410492733 - ( (0.8(1.410492733)² + (1.410492733) - 3) / (1.6(1.410492733) + 1) ) = 1.409852675 | E = |1.409852675 - 1.410492733| = 0.000640057",
-            "i=4, x4 = 1.409852675 - ( (0.8(1.409852675)² + (1.409852675) - 3) / (1.6(1.409852675) + 1) ) = 1.409852575 | E = |1.409852575 - 1.409852675| = 0.0000001"
+            "i=1, x1 = 1 - ( (0.8(1)² + (1) - 3) / (1.6(1) + 1) ) = 1.461538462 | ε = |1.461538462 - 1| = 0.461538462",
+            "i=2, x2 = 1.461538462 - ( (0.8(1.461538462)² + (1.461538462) - 3) / (1.6(1.461538462) + 1) ) = 1.410492733 | ε = |1.410492733 - 1.461538462| = 0.051045728",
+            "i=3, x3 = 1.410492733 - ( (0.8(1.410492733)² + (1.410492733) - 3) / (1.6(1.410492733) + 1) ) = 1.409852675 | ε = |1.409852675 - 1.410492733| = 0.000640057",
+            "i=4, x4 = 1.409852675 - ( (0.8(1.409852675)² + (1.409852675) - 3) / (1.6(1.409852675) + 1) ) = 1.409852575 | ε = |1.409852575 - 1.409852675| = 0.0000001"
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula X1", "pista": "Sustituye el valor inicial xo = 1 en la fórmula. Evalúa f(1) y f'(1).", "respuesta": "1.461538462"},
-            {"pregunta": "Calcula X2", "pista": "Usa x1 para iterar y calcula la diferencia absoluta para verificar el error.", "respuesta": "1.410492733"},
+            {"pregunta": "Calcula X1", "pista": "Sustituye el valor inicial xo = 1 en la fórmula. Evalúa f(1) y f'(1). El error aproximado es de 0.461538462.", "respuesta": "1.461538462"},
+            {"pregunta": "Calcula X2", "pista": "Usa x1 para iterar y calcula la diferencia absoluta para verificar el error. El error aproximado es de 0.051045728.", "respuesta": "1.410492733"},
             {"pregunta": "Calcula X3", "pista": "Sigue el proceso con x2. El error aproximado es de 0.00064.", "respuesta": "1.409852675"},
             {"pregunta": "Calcula la raíz final (X4)", "pista": "Realiza la última iteración con x3. El error absoluto final es de 0.0000001.", "respuesta": "1.409852575"}
         ],
@@ -251,19 +264,21 @@ banco = [
         "problema": "Calcule la raíz para f(x) = xe^x - 10",
         "valores": "a=1, b=2",
         "formula": [
-            "x = a - ( (f(a) * (b - a)) / (f(b) - f(a)) )",
-            "E = |xi+1 - xi|"
+            "            f(a) * (b - a)",
+            "x = a - ────────────────────",
+            "            f(b) - f(a)",
+            "ε = |xi+1 - xi|"
         ],
         "procedimiento": [
             "a=1, f(a)=-7.281718172",
             "b=2, f(b)=4.778112190",
             "i=0, b=2, f(b)=4.778112190, a=1, X=1.603799386, f(a)=-7.281718172",
-            "i=1, b=2, f(b)=4.778112190, a=1.603799386, X=1.721776248, f(a)=-2.026091162, E = 0.117976862",
-            "i=2, b=2, f(b)=4.778112190, a=1.721776248, X=1.741651888, f(a)=-0.367597181, E = 0.01987564",
-            "i=3, b=2, f(b)=4.778112190, a=1.741651888, X=1.744898309, f(a)=-0.060806187, E = 0.003246421",
-            "i=4, b=2, f(b)=4.778112190, a=1.744898309, X=1.745425782, f(a)=-0.009900159, E = 0.000527473",
-            "E = |xi5 - xi4| = |1.745425782 - 1.744898309|",
-            "E = 0.000527473"
+            "i=1, b=2, f(b)=4.778112190, a=1.603799386, X=1.721776248, f(a)=-2.026091162, ε = 0.117976862",
+            "i=2, b=2, f(b)=4.778112190, a=1.721776248, X=1.741651888, f(a)=-0.367597181, ε = 0.01987564",
+            "i=3, b=2, f(b)=4.778112190, a=1.741651888, X=1.744898309, f(a)=-0.060806187, ε = 0.003246421",
+            "i=4, b=2, f(b)=4.778112190, a=1.744898309, X=1.745425782, f(a)=-0.009900159, ε = 0.000527473",
+            "ε = |xi5 - xi4| = |1.745425782 - 1.744898309|",
+            "ε = 0.000527473"
         ],
         "pasos_juego": [
             {"pregunta": "Calcula f(a) para a=1", "pista": "Evalúa a = 1 en la función ", "respuesta": "-7.281718172"},
@@ -282,16 +297,18 @@ banco = [
         "problema": "Calcule la raíz de f(x) = e^(-x) - x.",
         "valores": "x0 = 0, x1 = 1",
         "formula": [
-            "xi+1 = xi+1 - ( (f(xi+1) * (xi+1 - xi)) / (f(xi+1) - f(xi)) )",
-            "Error = |xi+1 - xi| = 0.001"
+            "               f(xi) * (xi - xi-1)",
+            "xi+1 = xi - ─────────────────────────",
+            "               f(xi) - f(xi-1)",
+            "ε = |xi+1 - xi|"
         ],
         "procedimiento": [
             "x0 = 0, f(x0) = e^(-0) - 0 = 1",
             "x1 = 1, f(x1) = e^(-1) - 1 = -0.632120558",
-            "i=2, x2 = x1 - (f(x1)(x1 - x0)) / (f(x1) - f(x0)) = 1 - {(-0.632120558(1 - 0)) / (-0.632120558 - 1)} = 0.612699836, E = |0.612699836 - 1| = 0.387300613",
-            "i=3, x3 = x2 - (f(x2)(x2 - x1)) / (f(x2) - f(x1)) = 0.612699836 - {(-0.070813947(0.612699836 - 1)) / (-0.070813947 - (-0.632120558))} = 0.563838389, E = |0.563838389 - 0.612699836| = 0.048861447",
-            "i=4, x4 = 0.563838423 - {(-0.00004241924099(0.563838389 - 0.612699836)) / (0.005182354419 - (-0.070813946))} = 0.567170358, E = |0.567170358 - 0.563838389| = 0.003331969259",
-            "i=5, X5 = x4 - (f(x4)(x4 - x3)) / (f(x4) - f(x3)) = 0.567170358 - {(-0.00004241924099(0.567170358 - 0.563838389)) / (-0.00004241924099 - 0.005182354419)} = 0.567143306, E = |0.567143306 - 0.567170358| = 0.00002705181386"
+            "i=2, x2 = x1 - (f(x1)(x1 - x0)) / (f(x1) - f(x0)) = 1 - {(-0.632120558(1 - 0)) / (-0.632120558 - 1)} = 0.612699836, ε = |0.612699836 - 1| = 0.387300613",
+            "i=3, x3 = x2 - (f(x2)(x2 - x1)) / (f(x2) - f(x1)) = 0.612699836 - {(-0.070813947(0.612699836 - 1)) / (-0.070813947 - (-0.632120558))} = 0.563838389, ε = |0.563838389 - 0.612699836| = 0.048861447",
+            "i=4, x4 = 0.563838423 - {(-0.00004241924099(0.563838389 - 0.612699836)) / (0.005182354419 - (-0.070813946))} = 0.567170358, ε = |0.567170358 - 0.563838389| = 0.003331969259",
+            "i=5, X5 = x4 - (f(x4)(x4 - x3)) / (f(x4) - f(x3)) = 0.567170358 - {(-0.00004241924099(0.567170358 - 0.563838389)) / (-0.00004241924099 - 0.005182354419)} = 0.567143306, ε = |0.567143306 - 0.567170358| = 0.00002705181386"
         ],
         "pasos_juego": [
             {"pregunta": "Calcula f(x0)", "pista": "Evalúa el primer punto inicial x0 = 0 en f(x) = e^(-x) - x.", "respuesta": "1"},
@@ -404,22 +421,22 @@ banco = [
             "y5 = (4+2(1.350784375)-1.5084)/4 = 1.298292188",
             "z5 = (5-1.350784375+3(1.298292188))/5 = 1.508818438",
             "Errores absolutos en la 5ta. iteración:",
-            "Ex = |1.350784375 - 1.351625| = 0.000840625 < 0.001",
-            "Ey = |1.298292188 - 1.297875| = 0.000417188 < 0.001",
-            "Ez = |1.508818438 - 1.5084| = 0.000418438 < 0.001",
+            "εx = |1.350784375 - 1.351625| = 0.000840625 < 0.001",
+            "εy = |1.298292188 - 1.297875| = 0.000417188 < 0.001",
+            "εz = |1.508818438 - 1.5084| = 0.000418438 < 0.001",
             "Como todos los errores son menores a 0.001, el método converge."
         ],
         "pasos_juego": [
             {"pregunta": "Calcula x1 en la primera iteración", "pista": "Despeja x de la segunda ecuación y sustituye los valores iniciales y0=0, z0=0.", "respuesta": "1"},
             {"pregunta": "Calcula y1 en la primera iteración", "pista": "Despeja y de la tercera ecuación. Recuerda usar el valor de x1 recién calculado (x1 = 1) y z0=0.", "respuesta": "1.5"},
             {"pregunta": "Calcula z1 en la primera iteración", "pista": "Despeja z de la primera ecuación. Recuerda usar los valores más recientes calculados (x1 = 1, y1 = 1.5).", "respuesta": "1.7"},
-            {"pregunta": "¿A cuántas iteraciones se llegó a los margenes de error deseados?", "pista": "Revisa el desglose de las iteraciones en el procedimiento. ¿En qué iteración todos los errores absolutos (Ex, Ey, Ez) son menores a 0.001?", "respuesta": "5"},
+            {"pregunta": "¿A cuántas iteraciones se llegó a los margenes de error deseados?", "pista": "Revisa el desglose de las iteraciones en el procedimiento. ¿En qué iteración todos los errores absolutos (εx, εy, εz) son menores a 0.001?", "respuesta": "5"},
             {"pregunta": "Calcula el valor final de x (x5)", "pista": "Obtenido en la iteración 5 usando y4 = 1.297875 y z4 = 1.5084.", "respuesta": "1.350784375"},
             {"pregunta": "Calcula el valor final de y (y5)", "pista": "Obtenido en la iteración 5 usando el valor recién calculado de x5 = 1.350784375 y z4 = 1.5084.", "respuesta": "1.298292188"},
             {"pregunta": "Calcula el valor final de z (z5)", "pista": "Obtenido en la iteración 5 usando los valores más recientes x5 = 1.350784375 y y5 = 1.298292188.", "respuesta": "1.508818438"},
-            {"pregunta": "Calcula el error absoluto final en x (Ex)", "pista": "Aplica Ex = |x5 - x4|, donde x4 = 1.351625 y x5 = 1.350784375.", "respuesta": "0.000840625"},
-            {"pregunta": "Calcula el error absoluto final en y (Ey)", "pista": "Aplica Ey = |y5 - y4|, donde y4 = 1.297875 y y5 = 1.298292188.", "respuesta": "0.000417188"},
-            {"pregunta": "Calcula el error absoluto final en z (Ez)", "pista": "Aplica Ez = |z5 - z4|, donde z4 = 1.5084 y z5 = 1.508818438.", "respuesta": "0.000418438"}
+            {"pregunta": "Calcula el error absoluto final en x (εx)", "pista": "Aplica εx = |x5 - x4|, donde x4 = 1.351625 y x5 = 1.350784375.", "respuesta": "0.000840625"},
+            {"pregunta": "Calcula el error absoluto final en y (εy)", "pista": "Aplica εy = |y5 - y4|, donde y4 = 1.297875 y y5 = 1.298292188.", "respuesta": "0.000417188"},
+            {"pregunta": "Calcula el error absoluto final en z (εz)", "pista": "Aplica εz = |z5 - z4|, donde z4 = 1.5084 y z5 = 1.508818438.", "respuesta": "0.000418438"}
         ],
         "respuesta_final": "x5 = 1.350784375, y5 = 1.298292188, z5 = 1.508818438"
     },
@@ -456,22 +473,22 @@ banco = [
             "y6 = (4+2(1.35046875)-1.509515625)/4 = 1.297855469",
             "z6 = (5-1.35046875+3(1.298085938))/5 = 1.508757813",
             "Errores absolutos en la 6ta. iteración:",
-            "Ex = |1.350950195 - 1.35046875| = 0.000481445 < 0.001",
-            "Ey = |1.297855469 - 1.298085938| = 0.000230468 < 0.001",
-            "Ez = |1.508757813 - 1.509515625| = 0.000757812 < 0.001",
+            "εx = |1.350950195 - 1.35046875| = 0.000481445 < 0.001",
+            "εy = |1.297855469 - 1.298085938| = 0.000230468 < 0.001",
+            "εz = |1.508757813 - 1.509515625| = 0.000757812 < 0.001",
             "Como todos los errores son menores a 0.001, el método converge."
         ],
         "pasos_juego": [
             {"pregunta": "Calcula x1 en la primera iteración", "pista": "Despeja x de la segunda ecuación utilizando los valores iniciales y0=1, z0=1.", "respuesta": "1.25"},
             {"pregunta": "Calcula y1 en la primera iteración", "pista": "Despeja y de la tercera ecuación. Recuerda usar únicamente los valores de la iteración anterior, x0=1 y z0=1.", "respuesta": "1.25"},
             {"pregunta": "Calcula z1 en la primera iteración", "pista": "Despeja z de la primera ecuación utilizando los valores iniciales, x0=1 y y0=1.", "respuesta": "1.4"},
-            {"pregunta": "¿A cuántas iteraciones se llegó a los margenes de error deseados?", "pista": "Revisa el desglose de las iteraciones en el procedimiento. ¿En qué iteración todos los errores absolutos (Ex, Ey, Ez) son menores a 0.001?", "respuesta": "6"},
+            {"pregunta": "¿A cuántas iteraciones se llegó a los margenes de error deseados?", "pista": "Revisa el desglose de las iteraciones en el procedimiento. ¿En qué iteración todos los errores absolutos (εx, εy, εz) son menores a 0.001?", "respuesta": "6"},
             {"pregunta": "Calcula el valor final de x (x6)", "pista": "Obtenido en la iteración 6 usando y5 = 1.298085938 y z5 = 1.509515625.", "respuesta": "1.350950195"},
             {"pregunta": "Calcula el valor final de y (y6)", "pista": "Obtenido en la iteración 6 usando los valores de la iteración anterior, x5 = 1.35046875 y z5 = 1.509515625.", "respuesta": "1.297855469"},
             {"pregunta": "Calcula el valor final de z (z6)", "pista": "Obtenido en la iteración 6 usando los valores de la iteración anterior, x5 = 1.35046875 y y5 = 1.298085938.", "respuesta": "1.508757813"},
-            {"pregunta": "Calcula el error absoluto final en x (Ex)", "pista": "Aplica Ex = |x6 - x5|, donde x5 = 1.35046875 y x6 = 1.350950195.", "respuesta": "0.000481445"},
-            {"pregunta": "Calcula el error absoluto final en y (Ey)", "pista": "Aplica Ey = |y6 - y5|, donde y5 = 1.298085938 y y6 = 1.297855469.", "respuesta": "0.000230468"},
-            {"pregunta": "Calcula el error absoluto final en z (Ez)", "pista": "Aplica Ez = |z6 - z5|, donde z5 = 1.509515625 y z6 = 1.508757813.", "respuesta": "0.000757812"}
+            {"pregunta": "Calcula el error absoluto final en x (εx)", "pista": "Aplica εx = |x6 - x5|, donde x5 = 1.35046875 y x6 = 1.350950195.", "respuesta": "0.000481445"},
+            {"pregunta": "Calcula el error absoluto final en y (εy)", "pista": "Aplica εy = |y6 - y5|, donde y5 = 1.298085938 y y6 = 1.297855469.", "respuesta": "0.000230468"},
+            {"pregunta": "Calcula el error absoluto final en z (εz)", "pista": "Aplica εz = |z6 - z5|, donde z5 = 1.509515625 y z6 = 1.508757813.", "respuesta": "0.000757812"}
         ],
         "respuesta_final": "x6 = 1.350950195, y6 = 1.297855469, z6 = 1.508757813"
     },
@@ -481,11 +498,11 @@ banco = [
         "problema": "Ajustar los datos a una línea recta g(x) = a0 + a1x",
         "valores": "x:  1.1  |  1.9  |  2.4  |  4.8  |  5.1  |  10.5\ny:  2.5  |  2.7  |  3.7  |  5.2  |  6.0  |   8.3",
         "formula": [
-            "  a₀       a₁ x      g(x)",
-            "┌                     ┐",
+            "  a0       a1 x      g(x)",
+            "┌                       ┐",
             "│  n       Σx  │  Σy  │",
             "│  Σx     Σx²  │ Σxy  │",
-            "└                     ┘"
+            "└                       ┘"
         ],
         "procedimiento": [
             "Ecuaciones Normales:",
@@ -510,21 +527,25 @@ banco = [
             {"pregunta": "Calcula la sumatoria de y (Σy)", "pista": "Suma todos los valores de y de la tabla: (2.5 + 2.7 + 3.7 + 5.2 + 6.0 + 8.3).", "respuesta": "28.4"},
             {"pregunta": "Calcula la sumatoria de x² (Σx²)", "pista": "Eleva cada valor de x al cuadrado y súmalos: (1.1² + 1.9² + 2.4² + 4.8² + 5.1² + 10.5²).", "respuesta": "169.88"},
             {"pregunta": "Calcula la sumatoria de xy (Σxy)", "pista": "Multiplica cada par x*y y suma los resultados: (1.1*2.5 + 1.9*2.7 + 2.4*3.7 + 4.8*5.2 + 5.1*6.0 + 10.5*8.3).", "respuesta": "159.47"},
-            {"pregunta": "Calcula el valor de a1 (pendiente)", "pista": "Resuelve el sistema. Multiplicando Ec 1 por -4.3, sumas ambas y despejas a1: a1 = 37.35 / 58.94.", "respuesta": "0.633695283"},
-            {"pregunta": "Calcula el valor de a0 (intersección)", "pista": "Sustituye a1 en la Ecuación 1: a0 = (28.4 - 25.8 * a1) / 6.", "respuesta": "2.008443615"},
-            {"pregunta": "Calcula el valor ajustado g(10.5)", "pista": "Aplica g(x) = a0 + a1 * x con x = 10.5.", "respuesta": "8.662244090"}
+            {"pregunta": "Calcula el valor de a1", "pista": "Resuelve el sistema. Multiplicando Ec 1 por -4.3, sumas ambas y despejas a1: a1 = 37.35 / 58.94.", "respuesta": "0.633695283"},
+            {"pregunta": "Calcula el valor de a0", "pista": "Sustituye a1 en la Ecuación 1: a0 = (28.4 - 25.8 * a1) / 6.", "respuesta": "2.008443615"},
+            {"pregunta": "Calcula el valor ajustado de g(10.5)", "pista": "Aplica la función g(x) con x = 10.5.", "respuesta": "8.662244090"}
         ],
         "respuesta_final": "8.662244090"
     },
     {
         "id": 19,
         "metodo": "Regla Trapezoidal",
-        "problema": "Integral de 2 a 3 de (1 / (1+x²)) dx con n = 4",
+        "problema": "  3      1\n  ∫ ────────── dx\n  2   1 + x²\ncon n = 4",
         "valores": "a = 2, b = 3, n = 4",
         "formula": [
-            "      b - a",
-            "  h = ─────",
-            "        n"
+            "        b - a",
+            "  h = ─────────",
+            "          n",
+            "",
+            "      h   ┌          n-1                  ┐",
+            "  I = ─── │ f(a) + 2  Σ  f(a + ih) + f(b) │",
+            "      2   └          i=1                  ┘"
         ],
         "procedimiento": [
             "h = (b-a)/n = (3-2)/4 = 1/4 = 0.25",
@@ -536,7 +557,7 @@ banco = [
         ],
         "pasos_juego": [
             {"pregunta": "Calcula el valor de h", "pista": "Toma en cuenta los valores iniciales en la fórmula de h.", "respuesta": "0.25"},
-            {"pregunta": "Calcula la sumatoria interna de los corchetes", "pista": "Evalúa f(x) en los puntos de la partición y aplica los coeficientes correspondientes del trapecio compuesto.", "respuesta": "1.139335619"},
+            {"pregunta": "Calcula la sumatoria interna de los corchetes", "pista": "Evalua los valores obtenidos en la fórmula de I sin multiplicarlo por h/2", "respuesta": "1.139335619"},
             {"pregunta": "Calcula el resultado I final", "pista": "Multiplica la sumatoria obtenida por el factor h/2.", "respuesta": "0.142416952"}
         ],
         "respuesta_final": "0.142416952"
@@ -544,7 +565,7 @@ banco = [
     {
         "id": 20,
         "metodo": "Newton - Cotes (Abiertas)",
-        "problema": "Integral de -2 a 2 de (3x³ - 10) dx con n = 4",
+        "problema": "  2\n  ∫ (3x³ - 10) dx\n -2\ncon n = 4",
         "valores": "a = -2, b = 2, n = 4",
         "formula": [
             "          n+2                   b - a",
@@ -562,14 +583,14 @@ banco = [
         "pasos_juego": [
             {"pregunta": "Calcula el valor de h", "pista": "Toma en cuenta los valores iniciales en la fórmula de h.", "respuesta": "2/3"},
             {"pregunta": "Calcula el valor de alfa (α)", "pista": "Revisa el valor de α definido al inicio de la sección de procedimiento.", "respuesta": "6/20"},
-            {"pregunta": "Calcula el valor de la integral I", "pista": "Multiplica el factor global α * h por el resultado de la sumatoria interna del procedimiento.", "respuesta": "-40"}
+            {"pregunta": "Calcula el valor de I", "pista": "Multiplica el factor global α * h por el resultado de la sumatoria interna del procedimiento.", "respuesta": "-40"}
         ],
         "respuesta_final": "-40"
     },
     {
         "id": 21,
         "metodo": "Regla de 1/3 Simpson",
-        "problema": "  3\n  ∫ (1 / (1+x²)) dx\n  2\ncon n = 10",
+        "problema": "  3      1\n  ∫ ────────── dx\n  2   1 + x²\ncon n = 10",
         "valores": "a = 2, b = 3, n = 10",
         "formula": [
             "        h   ┌             n-1          n-2          ┐",
@@ -597,9 +618,9 @@ banco = [
         "problema": "  1\n  ∫ x³e^x dx\n  0\ncon n = 3",
         "valores": "a = 0, b = 1, n = 3",
         "formula": [
-            "        3 h ┌             n-1          ┐   b - a",
-            "  I = ─── │ f(a) + 3  Σ  f(xᵢ) + f(b) │ ; ─────",
-            "         8  └            i=1           ┘     n"
+            "       3   ┌             n-1          ┐       b - a",
+            "  I = ─── h│ f(a) + 3  Σ  f(xᵢ) + f(b) │ ;h = ─────",
+            "       8   └            i=1           ┘         n"
         ],
         "procedimiento": [
             "h = (b-a)/n = (1-0)/3 = 1/3",
@@ -623,7 +644,7 @@ banco = [
         "valores": "y0 = 1.2, h = 0.3, y1 = 1.2, t0 = 0, t1 = 0.3",
         "formula": [
             "y' = f(t, y)",
-            "yn+1 = yn + h/2 * [f(tn, yn) + f(tn+1, yn+1)]"
+            "yn+1 = yn + (h/2) * [f(tn, yn) + f(tn+1, yn+1)]"
         ],
         "procedimiento": [
             "Despejar y': y' = (-3yt - y) / 2",
@@ -647,7 +668,7 @@ banco = [
         "formula": [
             "k1 = h * f(yn, tn)",
             "k2 = h * f(yn + k1, tn + h)",
-            "yn+1 = yn + 1/2 * (k1 + k2)"
+            "yn+1 = yn + (1/2) * (k1 + k2)"
         ],
         "procedimiento": [
             "Despejar: y' = 2ty - 1",
@@ -658,8 +679,8 @@ banco = [
             "y1 = 0.651632664"
         ],
         "pasos_juego": [
-            {"pregunta": "Calcula k1", "pista": "Usa la fórmula: k1 = h * f(yn, tn), donde f(t, y) = 2ty - 1", "respuesta": "-0.6"},
-            {"pregunta": "Calcula k2", "pista": "Usa la fórmula: k2 = h * f(yn + k1, tn + h), donde f(t, y) = 2ty - 1", "respuesta": "0.303265329"},
+            {"pregunta": "Calcula k1", "pista": "Usa la fórmula de k1, donde f(t, y) = 2ty - 1", "respuesta": "-0.6"},
+            {"pregunta": "Calcula k2", "pista": "Usa la fórmula de k2, donde f(t, y) = 2ty - 1", "respuesta": "0.303265329"},
             {"pregunta": "Calcula y1 final", "pista": "Usa la fórmula: yn+1 = yn + 1/2 * (k1 + k2)", "respuesta": "0.651632664"}
         ],
         "respuesta_final": "0.651632664"
@@ -667,13 +688,13 @@ banco = [
     {
         "id": 25,
         "metodo": "Runge - Kutta de 3er Orden",
-        "problema": "y' = (2yt + 1) / y²",
+        "problema": "      2yt + 1\ny' = ─────────\n        y²   ",
         "valores": "y0 = 1, h = 0.25, t0 = 0",
         "formula": [
             "k1 = h * f(yn, tn)",
-            "k2 = h * f(yn + k1/2, tn + h/2)",
+            "k2 = h * f(yn + (k1/2), tn + (h/2))",
             "k3 = h * f(yn - k1 + 2*k2, tn + h)",
-            "yn+1 = yn + 1/6 * (k1 + 4*k2 + k3)"
+            "yn+1 = yn + (1/6) * (k1 + 4*k2 + k3)"
         ],
         "procedimiento": [
             "k1 = 0.25( (2(1)(0) + 1) / (1)² ) = 0.25",
@@ -693,14 +714,14 @@ banco = [
     {
         "id": 26,
         "metodo": "Runge - Kutta de 4to. Orden por 1/3 de Simpson",
-        "problema": "y' = (y + t)² / (1 - y)",
+        "problema": "      (y + t)²\ny' = ──────────\n       1 - y  ",
         "valores": "y0 = 0.4, h = 0.2, t0 = 0",
         "formula": [
             "k1 = h * f(yn, tn)",
-            "k2 = h * f(yn + k1/2, tn + h/2)",
-            "k3 = h * f(yn + k2/2, tn + h/2)",
+            "k2 = h * f(yn + (k1/2), tn + (h/2))",
+            "k3 = h * f(yn + (k2/2), tn + (h/2))",
             "k4 = h * f(yn + k3, tn + h)",
-            "yn+1 = yn + 1/6 * (k1 + 2*k2 + 2*k3 + k4)"
+            "yn+1 = yn + (1/6) * (k1 + 2*k2 + 2*k3 + k4)"
         ],
         "procedimiento": [
             "k1 = (0.2){ [0.4 + 0]² / (1 - 0.4) } = (0.2){ (0.4)² / 0.6 } = 0.053333333",
@@ -722,14 +743,14 @@ banco = [
     {
         "id": 27,
         "metodo": "Runge - Kutta de 4to. Orden por 3/8 de Simpson",
-        "problema": "y' = -y / (y² + t)",
+        "problema": "        -y   \ny' = ────────\n      y² + t ",
         "valores": "y0 = 1, h = 0.5, t0 = 0",
         "formula": [
             "k1 = h * f(yn, tn)",
-            "k2 = h * f(yn + k1/3, tn + h/3)",
-            "k3 = h * f(yn + k1/3 + k2/3, tn + 2*h/3)",
+            "k2 = h * f(yn + (k1/3), tn + (h/3))",
+            "k3 = h * f(yn + (k1/3) + (k2/3), tn + (2*h/3))",
             "k4 = h * f(yn + k1 - k2 - k3, tn + h)",
-            "yn+1 = yn + 1/8 * (k1 + 3*k2 + 3*k3 + k4)"
+            "yn+1 = yn + (1/8) * (k1 + 3*k2 + 3*k3 + k4)"
         ],
         "procedimiento": [
             "k1 = 0.5{ -1 / ((1)² + 0) } = -0.5",
@@ -758,8 +779,8 @@ banco = [
             "m1 = h * [a * Vn * qn - b * Un]",
             "k2 = h * (Vn + m1)",
             "m2 = h * [a * (Vn + m1) * (qn + h) - b * (Un + k1)]",
-            "y1 = Un + 1/2 * (k1 + k2)",
-            "y'1 = Vn + 1/2 * (m1 + m2)"
+            "y1 = Un + (1/2) * (k1 + k2)",
+            "y'1 = Vn + (1/2) * (m1 + m2)"
         ],
         "procedimiento": [
             "y'' = 2y't - y",

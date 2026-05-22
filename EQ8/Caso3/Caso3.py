@@ -36,6 +36,7 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase, estado_juego):
     # Fuentes
     titulo_fuente = pygame.font.SysFont("Arial", 36, bold=True)
     texto_fuente = pygame.font.SysFont("Arial", 22)
+    formula_fuente = pygame.font.SysFont("Arial", 18, italic=True)
     texto_pista_fuente = pygame.font.SysFont("Arial", 18)
     input_fuente = pygame.font.SysFont("Arial", 28, bold=True)
     
@@ -83,7 +84,7 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase, estado_juego):
     
     # Botones
     btn_continuar = pygame.Rect(ancho//2 - 150, alto - 100, 300, 60)
-    btn_pista = pygame.Rect(20, 20, 180, 40)
+    btn_pista = pygame.Rect(20, alto - 130, 180, 50)
     btn_enviar = pygame.Rect(ancho//2 - 100, alto - 80, 200, 50)
     btn_volver = pygame.Rect(ancho//2 - 150, alto - 100, 300, 60)
     btn_comisaria = pygame.Rect(ancho//2 - 150, alto - 100, 300, 60)
@@ -286,7 +287,7 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase, estado_juego):
                     "Resuelve el siguiente problema para encontrar la",
                     f"combinaci\u00f3n correcta: {problema['metodo']}",
                     "",
-                    "Las pistas cuestan 4 minutos y te dar\u00e1n el procedimiento."
+                    "La pista te costará 4 minutos y te ayudará con el procedimiento."
                 ]
             elif fase == 2:
                 tit = titulo_fuente.render("CASO 03: El Pasillo", True, BLANCO)
@@ -296,7 +297,7 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase, estado_juego):
                     "junto a una nota con ecuaciones. Resu\u00e9lvela para",
                     f"identificar la llave: {problema['metodo']}",
                     "",
-                    "Las pistas cuestan 4 minutos de tu tiempo."
+                    "La pista te costará 4 minutos y te ayudará con el procedimiento."
                 ]
             elif fase == 3:
                 tit = titulo_fuente.render("CASO 03: La Confrontaci\u00f3n", True, BLANCO)
@@ -306,7 +307,7 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase, estado_juego):
                     "Resuelve el problema para que sucumba a la presi\u00f3n:",
                     f"{problema['metodo']}",
                     "",
-                    "Las pistas cuestan 4 minutos de tu tiempo."
+                    "La pista te costará 4 minutos y te ayudará con el procedimiento."
                 ]
                 
             pantalla.blit(tit, (centrar_x(tit, ancho), 100))
@@ -324,7 +325,7 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase, estado_juego):
             secs = tiempo_restante % 60
             color_tiempo = BLANCO if tiempo_restante > 60 else ROJO
             txt_tiempo = titulo_fuente.render(f"{mins:02d}:{secs:02d}", True, color_tiempo)
-            pantalla.blit(txt_tiempo, (ancho - 150, 20))
+            pantalla.blit(txt_tiempo, (ancho - txt_tiempo.get_width() - 30, alto - 135))
             
             txt_vidas = texto_fuente.render(f"Vidas: {estado_juego['vidas']}", True, ROJO)
             pantalla.blit(txt_vidas, (ancho - txt_vidas.get_width() - 30, alto - 80))
@@ -347,7 +348,7 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase, estado_juego):
             tit_datos = titulo_fuente.render(f"M\u00e9todo: {problema['metodo']}", True, AZUL)
             pantalla.blit(tit_datos, (centrar_x(tit_datos, ancho), 30))
             
-            # Dibujar problema (con soporte para múltiples líneas con \n)
+            # Dibujar problema
             y_actual = 80
             if "\n" in problema["problema"]:
                 lineas_prob = problema["problema"].split("\n")
@@ -360,7 +361,7 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase, estado_juego):
                 pantalla.blit(txt_prob, (centrar_x(txt_prob, ancho), y_actual))
                 y_actual += 30
             
-            # Dibujar valores (con soporte para múltiples líneas con \n)
+            # Dibujar valores 
             if "\n" in problema["valores"]:
                 lineas_val = problema["valores"].split("\n")
                 for linea in lineas_val:
@@ -377,9 +378,9 @@ def ejecutar_fase(pantalla, reloj, ancho, alto, dificultad, fase, estado_juego):
                 y_actual += 10
                 lineas_formula = problema["formula"] if isinstance(problema["formula"], list) else problema["formula"].split("\n")
                 for linea in lineas_formula:
-                    txt_form = texto_fuente.render(linea, True, BLANCO)
+                    txt_form = formula_fuente.render(linea, True, BLANCO)
                     pantalla.blit(txt_form, (centrar_x(txt_form, ancho), y_actual))
-                    y_actual += 25
+                    y_actual += 20
             
             inst_txt = texto_fuente.render(f"Paso {paso_actual+1}/{len(pasos_finales)} - {pasos_finales[paso_actual]['pregunta']}", True, AMARILLO)
             pantalla.blit(inst_txt, (centrar_x(inst_txt, ancho), 460))
